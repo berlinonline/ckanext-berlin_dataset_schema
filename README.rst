@@ -32,6 +32,8 @@
 ckanext-berlin_dataset_schema
 =============
 
+Implementation if IDatasetForm to provide a custom dataset schema for daten.berlin.de.
+
 .. Put a description of your extension here:
    What does it do? What features does it have?
    Consider including some screenshots or embedding a video!
