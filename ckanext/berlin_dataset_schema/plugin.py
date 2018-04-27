@@ -3,7 +3,7 @@ import ckan.plugins.toolkit as toolkit
 import validation as berlin_validators
 
 
-class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin):
+class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
 
@@ -40,6 +40,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin):
         schema = super(Berlin_Dataset_SchemaPlugin, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
+    
+    def setup_template_variables(self, context, data_dict):
+        return {}
 
     def _modify_package_schema(self, schema):
         schema.update({
