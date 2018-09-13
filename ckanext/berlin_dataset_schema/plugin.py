@@ -7,13 +7,28 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
 
+    def __init__(self):
+        self.berlin_types = [
+            u'datensatz' ,
+            u'dokument' ,
+            u'app'
+        ]
+        super(Berlin_Dataset_SchemaPlugin, self).__init__()
+
+
     # -------------------------------------------------------------------
     # Implementation IConfigurer
     # -------------------------------------------------------------------
 
-    def update_config(self, config_):
-        toolkit.add_public_directory(config_, 'public')
+    def update_config(self, config):
+        toolkit.add_public_directory(config, 'public')
         toolkit.add_resource('fanstatic', 'berlin_dataset_schema')
+        site_url = config.get('ckan.site_url', None)
+        port = 80
+        url_parts = site_url.split(":")
+        if len(url_parts) > 2:
+            port = url_parts[2]
+        config['schema_ref_url'] = "http://localhost:{}{}".format(port, "/terms")
 
     # -------------------------------------------------------------------
     # Implementation IDatasetForm
@@ -46,6 +61,31 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
     def _modify_package_schema(self, schema):
         schema.update({
+            'author': [ 
+                toolkit.get_validator('not_empty') ,
+                unicode
+            ]
+        })
+        schema.update({
+            'notes': [ 
+                toolkit.get_validator('not_empty') ,
+                unicode
+            ]
+        })
+        schema.update({
+            'license_id': [ 
+                toolkit.get_validator('not_empty') ,
+                unicode
+            ]
+        })
+        schema.update({
+            'maintainer_email': [ 
+                toolkit.get_validator('not_empty') ,
+                unicode ,
+                toolkit.get_validator('email_validator') ,
+            ]
+        })
+        schema.update({
             'username': [
                 toolkit.get_validator('ignore_missing'),
                 toolkit.get_converter('convert_to_extras')
@@ -53,19 +93,20 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         })
         schema.update({
             'berlin_type': [
-                toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('not_empty'),
+                berlin_validators.is_berlin_type,
                 toolkit.get_converter('convert_to_extras')
             ]
         })
         schema.update({
             'berlin_source': [
-                toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('not_empty'),
                 toolkit.get_converter('convert_to_extras')
             ]
         })
         schema.update({
             'date_released': [
-                toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('not_empty'),
                 berlin_validators.isodate_notime,
                 toolkit.get_converter('convert_to_extras')
             ]
@@ -121,6 +162,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_converter('convert_to_extras')
             ]
         })
+
         return schema
 
     def show_package_schema(self):
@@ -196,6 +238,5 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_validator('ignore_missing')
             ]
         })
+        schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         return schema
-
-        
