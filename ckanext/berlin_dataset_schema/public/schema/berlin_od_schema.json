@@ -9,7 +9,7 @@
     "berlin_type",
     "berlin_source",
     "author",
-    "author_email",
+    "maintainer_email",
     "notes",
     "license_id",
     "groups",
