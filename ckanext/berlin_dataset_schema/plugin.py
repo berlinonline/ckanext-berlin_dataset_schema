@@ -135,20 +135,20 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'berlin_type': [
                 toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('not_missing')
+                toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'berlin_source': [
                 toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('not_missing')
+                toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'date_released': [
                 toolkit.get_converter('convert_from_extras'),
                 berlin_validators.isodate_notime,
-                toolkit.get_validator('not_missing')
+                toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
