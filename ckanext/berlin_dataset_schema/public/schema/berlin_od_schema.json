@@ -214,12 +214,12 @@
       ],
       "type": "string"
     },
-    "temporal_coverage-from": {
+    "temporal_coverage_from": {
       "description": "Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
       "type": "string", 
       "format": "date-time"
     }, 
-    "temporal_coverage-to": {
+    "temporal_coverage_to": {
       "description": "End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
       "type": "string", 
       "format": "date-time"
