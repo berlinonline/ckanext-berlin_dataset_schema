@@ -1,28 +1,40 @@
 # coding: utf-8
+"""
+Custom validation functions for the extended version of the CKAN
+package schema.
+"""
 
 import logging
 from datetime import datetime
 from ckan.common import _
-from pylons import config
 import ckan.lib.navl.dictization_functions as df
 
 
 log = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-def isodate_notime(value):
-=======
 def berlin_types():
-    from ckanext.berlin_dataset_schema.plugin import Berlin_Dataset_SchemaPlugin
-    log.debug("schema_ref_url: {}".format(Berlin_Dataset_SchemaPlugin().schema_ref_url()))
+    """
+    Return the currently valid values of 'berlin_type'.
+    """
     return [
         u'datensatz' ,
         u'dokument' ,
         u'app'
     ]
 
-def isodate_notime(value, context):
->>>>>>> add requiredness to schema, move berlin_types to validation
+def isodate_notime(value):
+    """
+    Validator function to check that a value corresponds to the
+    ISO8601 pattern YYYY-MM-DD.
+
+    Valid datetimes that extend beyond that pattern will be 
+    shortened to YYYY-MM-DD, empty values will be transformed to None.
+
+    Due to limitations of earlier versions of Python, dates past 
+    1900 will cause an Exception.
+
+    value -- the date value to be validated
+    """
     if isinstance(value, datetime):
         return value.__format__("%Y-%m-%d")
     if value == '':
@@ -36,6 +48,9 @@ def isodate_notime(value, context):
     return date
 
 def is_berlin_type(value):
+    """
+    Validator function to check that a value is one of ['datensatz', 'dokument', 'app'].
+    """
     _berlin_types = berlin_types()
     if value in _berlin_types:
         return value
