@@ -9,7 +9,7 @@
 ckanext-berlin_dataset_schema
 =============
 
-Implementation of IDatasetForm to provide a custom dataset schema for the `Berlin Open Data Portal <https://daten.berlin.de>`_.
+Implementation of IDatasetForm to provide a custom dataset schema for the `Berlin Open Data Portal <https://daten.berlin.de>`_. 
 
 .. Put a description of your extension here:
    What does it do? What features does it have?
