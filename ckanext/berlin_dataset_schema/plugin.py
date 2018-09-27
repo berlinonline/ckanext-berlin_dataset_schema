@@ -1,20 +1,17 @@
+import logging
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-import validation as berlin_validators
+import ckanext.berlin_dataset_schema.validation as berlin_validators
+from ckanext.berlin_dataset_schema.schema import Schema
+
+from pprint import pformat
+
+log = logging.getLogger(__name__)
 
 
 class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
-
-    def __init__(self):
-        self.berlin_types = [
-            u'datensatz' ,
-            u'dokument' ,
-            u'app'
-        ]
-        super(Berlin_Dataset_SchemaPlugin, self).__init__()
-
 
     # -------------------------------------------------------------------
     # Implementation IConfigurer
@@ -29,6 +26,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         if len(url_parts) > 2:
             port = url_parts[2]
         config['schema_ref_url'] = "http://localhost:{}{}".format(port, "/terms")
+        self.json_schema = Schema()
+        self.json_schema.load_schema()
 
     # -------------------------------------------------------------------
     # Implementation IDatasetForm
@@ -59,109 +58,88 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     def setup_template_variables(self, context, data_dict):
         return {}
 
+    def _get_required_validator(self, attribute):
+        if self.json_schema.required(attribute):
+            return toolkit.get_validator('not_empty')
+        return toolkit.get_validator('ignore_missing')
+
+    def _required_validator_set(self, validator_chain):
+        if (validator_chain[0] is toolkit.get_validator('not_empty') or
+                validator_chain[0] is toolkit.get_validator('ignore_missing')):
+            return True
+        return False
+
+    def _prepend_required_validator(self, schema):
+        for attribute, validator_chain in schema.iteritems():
+            log.debug(attribute)
+            if self.json_schema.contains(attribute):
+                attribute_type = self.json_schema.attribute_type(attribute)
+                log.debug("\t%s", attribute_type)
+                if attribute_type != "array":
+                    required_validator = self._get_required_validator(attribute)
+                    if not self._required_validator_set(validator_chain):
+                        log.debug("required-validator not set")
+                        schema[attribute] = [ required_validator ] + validator_chain
+                    else:
+                        schema[attribute][0] = required_validator
+        return schema
+
     def _modify_package_schema(self, schema):
-        schema.update({
-            'author': [ 
-                toolkit.get_validator('not_empty') ,
-                unicode
-            ]
-        })
-        schema.update({
-            'notes': [ 
-                toolkit.get_validator('not_empty') ,
-                unicode
-            ]
-        })
-        schema.update({
-            'license_id': [ 
-                toolkit.get_validator('not_empty') ,
-                unicode
-            ]
-        })
-        schema.update({
-            'maintainer_email': [ 
-                toolkit.get_validator('not_empty') ,
-                unicode ,
-                toolkit.get_validator('email_validator') ,
-            ]
-        })
-        schema.update({
-            'username': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'berlin_type': [
-                toolkit.get_validator('not_empty'),
-                berlin_validators.is_berlin_type,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'berlin_source': [
-                toolkit.get_validator('not_empty'),
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'date_released': [
-                toolkit.get_validator('not_empty'),
-                berlin_validators.isodate_notime,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'date_updated': [
-                toolkit.get_validator('ignore_missing'),
-                berlin_validators.isodate_notime,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'attribution_text': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_extras')                
-            ]
-        })
-        schema.update({
-            'temporal_granularity': [
-                toolkit.get_validator('ignore_missing'),
-                # TODO: add validation
-                # berlin_validators.contained_in_enum,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'temporal_coverage_from': [
-                toolkit.get_validator('ignore_missing'),
-                berlin_validators.isodate_notime,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'temporal_coverage_to': [
-                toolkit.get_validator('ignore_missing'),
-                berlin_validators.isodate_notime,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'geographical_granularity': [
-                toolkit.get_validator('ignore_missing'),
-                # TODO: add validation
-                # berlin_validators.contained_in_enum,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
-        schema.update({
-            'geographical_coverage': [
-                toolkit.get_validator('ignore_missing'),
-                # TODO: add validation
-                # berlin_validators.contained_in_enum,
-                toolkit.get_converter('convert_to_extras')
-            ]
-        })
+        # The following are handled by ckan/logic/schema.py/default_create_package_schema():
+        # - title
+        # - name
+        # - author_email
+        # - maintainer
+        # - url
+
+        schema.update({'berlin_type': [
+            berlin_validators.is_berlin_type,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'berlin_source': [
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'attribution_text': [
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'username': [
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'date_released': [
+            berlin_validators.isodate_notime,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'date_updated': [
+            berlin_validators.isodate_notime,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'temporal_granularity': [
+            # TODO: add validation
+            # berlin_validators.contained_in_enum,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'temporal_coverage_from': [
+            berlin_validators.isodate_notime,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'temporal_coverage_to': [
+            berlin_validators.isodate_notime,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'geographical_granularity': [
+            # TODO: add validation
+            # berlin_validators.contained_in_enum,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+        schema.update({'geographical_coverage': [
+            # TODO: add validation
+            # berlin_validators.contained_in_enum,
+            toolkit.get_converter('convert_to_extras')
+        ]})
+
+        log.debug(pformat(schema))
+        schema = self._prepend_required_validator(schema)
+        log.debug(pformat(schema))
 
         return schema
 
