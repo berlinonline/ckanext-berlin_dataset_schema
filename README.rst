@@ -5,6 +5,10 @@
 .. image:: https://travis-ci.org/berlinonline/ckanext-berlin_dataset_schema.svg?branch=master
     :target: https://travis-ci.org/berlinonline/ckanext-berlin_dataset_schema
 
+.. image:: https://coveralls.io/repos/berlinonline/ckanext-dcatde_berlin/badge.svg
+  :target: https://coveralls.io/r/berlinonline/ckanext-dcatde_berlin
+
+
 =============
 ckanext-berlin_dataset_schema
 =============
