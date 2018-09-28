@@ -43,3 +43,17 @@ docs/_build/
 
 # OS X
 .DS_Store
+
+# local stuff
+test.ini
+
+bin/activate*
+bin/easy_install*
+bin/nosetests*
+bin/pip*
+bin/python*
+bin/wheel
+lib/
+man/
+include/
+pip-selfcheck.json
