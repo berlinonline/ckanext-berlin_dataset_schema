@@ -34,3 +34,14 @@ def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error():
 @raises(ValueError)
 def test_isodate_notime_datetime_date_before_1900_raises_value_error():
     validation.isodate_notime(datetime(1869, 9, 6, 7, 43, 23, 10))
+
+# -------------------
+
+@raises(df.Invalid)
+def test_is_berlin_type_raises_invalid_error_for_bad_value():
+    validation.is_berlin_type('goo star')
+
+def test_is_berlin_type_gives_correct_answer():
+    berlin_types = [ 'datensatz', 'dokument', 'app' ]
+    for _type in berlin_types:
+        assert validation.is_berlin_type(_type) is _type
