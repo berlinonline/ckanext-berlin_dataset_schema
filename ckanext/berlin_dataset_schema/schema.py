@@ -6,31 +6,24 @@ Datenregister packages.
 
 import json
 import logging
-import os
 
-from ckan.plugins import SingletonPlugin
+import ckan.plugins as plugins
 
 log = logging.getLogger(__name__)
 
-class Schema(SingletonPlugin):
+class Schema(plugins.SingletonPlugin):
     """
     Class representing the dataset JSON Schema.
     """
 
-    def load_schema(self):
+    def load_schema(self, schema_path):
         """
-        Load the schema from a local filepath.
+        Load the schema.
         """
         if not hasattr(self, 'schema'):
-            log.debug("loading schema...")
-            path = os.path.abspath(__file__)
-            dir_path = os.path.dirname(path)
-            schema_path = os.path.join(dir_path, "public", "schema", "berlin_od_schema.json")
-
+            self.schema = {}
             with open(schema_path) as json_data:
                 self.schema = json.load(json_data)
-        else:
-            log.debug("schema already loaded...")
 
     def required(self, attribute):
         """

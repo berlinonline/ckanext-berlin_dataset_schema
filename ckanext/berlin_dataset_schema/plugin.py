@@ -5,7 +5,6 @@ Module for the CKAN extension defining the dataset schema for daten.berlin.de.
 
 import logging
 import os
-from pprint import pformat
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -38,8 +37,13 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         if len(url_parts) > 2:
             port = url_parts[2]
         config['schema_ref_url'] = "http://localhost:{}{}".format(port, "/terms")
+
+        path = os.path.abspath(__file__)
+        dir_path = os.path.dirname(path)
+        schema_path = os.path.join(dir_path, "public", "schema", "berlin_od_schema.json")
+
         self.json_schema = Schema()
-        self.json_schema.load_schema()
+        self.json_schema.load_schema(schema_path)
 
     # -------------------------------------------------------------------
     # Implementation IDatasetForm
@@ -140,6 +144,10 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         return schema
 
     def _modify_package_schema(self, schema):
+        """
+        Schema for package modifications, used by both create_package_schema and
+        update_package_schema.
+        """
         # The following are handled by ckan/logic/schema.py/default_create_package_schema():
         # - title
         # - name
