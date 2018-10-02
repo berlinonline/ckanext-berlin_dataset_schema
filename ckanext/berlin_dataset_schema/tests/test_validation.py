@@ -4,6 +4,16 @@
 from datetime import datetime
 from nose.tools import raises
 import ckanext.berlin_dataset_schema.validation as validation
+import ckan.lib.navl.dictization_functions as df
+
+# workaround for missing translator object from 
+# https://github.com/ckan/ckanext-dcat/commit/bd490115da8087a14b9a2ef603328e69535144bb
+from paste.registry import Registry
+from ckan.lib.cli import MockTranslator
+registry = Registry()
+registry.prepare()
+from pylons import translator
+registry.register(translator, MockTranslator())
 
 def test_isodate_notime_empty_is_none():
     assert validation.isodate_notime('') is None
@@ -17,8 +27,8 @@ def test_isodate_notime_datetime_string_is_truncated():
 def test_isodate_notime_illegal_string_after_date_is_ignored():
     assert validation.isodate_notime("1969-09-06foo bar") == "1969-09-06"
 
-@raises(TypeError)
-def test_isodate_notime_datetime_illegal_date_string_raises_type_error():
+@raises(df.Invalid)
+def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error():
     validation.isodate_notime("foor bar")
 
 @raises(ValueError)
