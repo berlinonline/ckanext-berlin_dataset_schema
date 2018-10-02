@@ -1,15 +1,24 @@
+# encoding: utf-8
+"""
+Module for the CKAN extension defining the dataset schema for daten.berlin.de.
+"""
+
 import logging
+import os
+from pprint import pformat
+
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
 from ckanext.berlin_dataset_schema.schema import Schema
 
-from pprint import pformat
-
 log = logging.getLogger(__name__)
 
 
 class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
+    """
+    Main plugin class defining the dataset schema for daten.berlin.de.
+    """
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
 
@@ -18,6 +27,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     # -------------------------------------------------------------------
 
     def update_config(self, config):
+        """
+        Implementation of IConfigurer.update_config.
+        """
         toolkit.add_public_directory(config, 'public')
         toolkit.add_resource('fanstatic', 'berlin_dataset_schema')
         site_url = config.get('ckan.site_url', None)
@@ -31,54 +43,97 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
     # -------------------------------------------------------------------
     # Implementation IDatasetForm
+    #
+    # Since Berlin_Dataset_SchemaPlugin inherits from DefaultDatasetForm,
+    # not all of IDatasetForm's methods need to be implemented here.
     # -------------------------------------------------------------------
-    
+
     def package_types(self):
+        """
+        Implementation of IDatasetForm.package_types().
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.package_types
+        """
         # This plugin doesn't handle any special package types, it just
         # registers itself as the default (above).
         return []
 
     def is_fallback(self):
+        """
+        Implementation of IDatasetForm.is_fallback().
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.is_fallback
+        """
         # Return True to register this plugin as the default handler for
         # package types not handled by any other IDatasetForm plugin.
         return True
 
     def create_package_schema(self):
+        """
+        Implementation of IDatasetForm.create_package_schema() (the schema for
+        creating new packages).
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.create_package_schema
+        """
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).create_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
 
     def update_package_schema(self):
+        """
+        Implementation of IDatasetForm.update_package_schema() (the schema for
+        updating existing packages).
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.update_package_schema
+        """
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
     
     def setup_template_variables(self, context, data_dict):
+        """
+        Implementation of IDatasetForm.setup_template_variables()
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.setup_template_variables
+        """
         return {}
 
     def _get_required_validator(self, attribute):
+        """
+        For an attribute, return the  matching validator defining requiredness (`not_empty`
+        or `ignore_missing`), based on whether or not the loaded JSON schema definies it as
+        required.
+        """
         if self.json_schema.required(attribute):
             return toolkit.get_validator('not_empty')
         return toolkit.get_validator('ignore_missing')
 
     def _required_validator_set(self, validator_chain):
+        """
+        Check if for a chain (list) of validators, the first one
+        defines requiredness (`not_empty` or `ignore_missing`)
+        """
         if (validator_chain[0] is toolkit.get_validator('not_empty') or
                 validator_chain[0] is toolkit.get_validator('ignore_missing')):
             return True
         return False
 
     def _prepend_required_validator(self, schema):
+        """
+        Prepend a validator defining requiredness (either `not_empty` or 
+        `ignore_missing`) to each attribute definition in the schema, but only if:
+
+        - the loaded JSON schema contains the attribute
+        - it's not a sub-schema
+        """
         for attribute, validator_chain in schema.iteritems():
-            log.debug(attribute)
             if self.json_schema.contains(attribute):
                 attribute_type = self.json_schema.attribute_type(attribute)
-                log.debug("\t%s", attribute_type)
                 if attribute_type != "array":
                     required_validator = self._get_required_validator(attribute)
                     if not self._required_validator_set(validator_chain):
-                        log.debug("required-validator not set")
                         schema[attribute] = [ required_validator ] + validator_chain
                     else:
                         schema[attribute][0] = required_validator
@@ -137,13 +192,16 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('convert_to_extras')
         ]})
 
-        log.debug(pformat(schema))
         schema = self._prepend_required_validator(schema)
-        log.debug(pformat(schema))
 
         return schema
 
     def show_package_schema(self):
+        """
+        Implementation of IDatasetForm.show_package_schema()
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.show_package_schema
+        """
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).show_package_schema()
         schema.update({
