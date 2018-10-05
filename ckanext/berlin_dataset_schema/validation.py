@@ -7,10 +7,13 @@ package schema.
 import logging
 from datetime import datetime
 from ckan.common import _
+import ckan.logic as logic
+import ckan.model as model
+from ckan.common import c
 import ckan.lib.navl.dictization_functions as df
 
-
 log = logging.getLogger(__name__)
+get_action = logic.get_action
 
 def berlin_types():
     """
@@ -56,3 +59,23 @@ def is_berlin_type(value):
         return value
     else:
         raise df.Invalid(_('berlin_type must be one of [ {} ].'.format(', '.join(_berlin_types))))
+
+def is_group_name_valid(name, context=None):
+    """
+    Check if a name is a valid group name for the current user.
+    """
+    if not context:
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': c.user,
+            'auth_user_obj': c.userobj,
+            'use_cache': False
+        }
+    context['is_member'] = True
+
+    users_groups = get_action('group_list_authz')(context, {})
+    group_names = [ group['name'] for group in users_groups ]
+    if name in group_names:
+        return True
+    return False

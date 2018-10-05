@@ -6,13 +6,14 @@ Module for the CKAN extension defining the dataset schema for daten.berlin.de.
 import logging
 import os
 
+from ckan.common import _
+import ckan.lib.navl.dictization_functions as df
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
 from ckanext.berlin_dataset_schema.schema import Schema
 
 log = logging.getLogger(__name__)
-
 
 class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     """
@@ -95,7 +96,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema = super(Berlin_Dataset_SchemaPlugin, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
-    
+
     def setup_template_variables(self, context, data_dict):
         """
         Implementation of IDatasetForm.setup_template_variables()
@@ -126,7 +127,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
     def _prepend_required_validator(self, schema):
         """
-        Prepend a validator defining requiredness (either `not_empty` or 
+        Prepend a validator defining requiredness (either `not_empty` or
         `ignore_missing`) to each attribute definition in the schema, but only if:
 
         - the loaded JSON schema contains the attribute
@@ -284,3 +285,34 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         })
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         return schema
+
+    def validate(self, context, data_dict, schema, action):
+        """
+        Implementation of IDatasetForm.validate()
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.validate
+        """
+        _errors = {}
+
+        # 'category' would be passed from the package template. If it exists, we generate an entry in
+        # 'groups' from it:
+        if 'category' in data_dict:
+            category = data_dict['category']
+            groups = data_dict.get('groups', [])
+            data_dict['groups'] = groups + [ { 'name': category }]
+
+        # Check if the group names exist:
+        for group in data_dict.get('groups', []):
+            group_name = group.get('name', None)
+            if not berlin_validators.is_group_name_valid(group_name):
+                _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist.'.format(group_name)) ]
+
+        (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
+        if action in [ 'package_create', 'package_update' ]:
+            if 'groups' not in data_dict:
+                _errors['groups'] = _errors.get('groups', []) + [ _('Required field \'groups\' not set.') ]
+
+        if 'groups' in _errors:
+            errors['groups'] = errors.get('groups', []) + _errors['groups']
+
+        return (data_dict, errors)
