@@ -131,6 +131,10 @@ class TestSchemaGeneration(object):
         - Does it run at all?
         - Are missing properties marked as missing?
         - Are invalid dates marked as such?
+        - Is an invalid license_ids marked as such?
+        - Is an invalid geographical_coverage markes as such?
+        - Is an invalid geographical_granularity markes as such?
+        - Is an invalid temporal_granularity markes as such?
         - Non-standard properties in the data are turned into extras.
         """
         package_plugin = lib_plugins.lookup_package_plugin()
@@ -140,6 +144,10 @@ class TestSchemaGeneration(object):
             'title': 'Foo Bar' ,
             'date_released': 'foo' ,
             'temporal_coverage_to': '1855-06-06' ,
+            'license_id': 'unlicensed' ,
+            'temporal_granularity': 'foo' ,
+            'geographical_coverage': 'Hamburg' ,
+            'geographical_granularity': 'Atom'
         }
         mock_model = mock.MagicMock()
         mock_session = mock_model.session
@@ -149,7 +157,6 @@ class TestSchemaGeneration(object):
             'berlin_type',
             'maintainer_email',
             'author',
-            'license_id',
             'notes',
             'berlin_source'
         ]
@@ -158,6 +165,10 @@ class TestSchemaGeneration(object):
             assert errors_unflattened[prop] == ['Missing value']
         for prop in bad_date:
             assert errors_unflattened[prop] == ['Date format incorrect. Use ISO8601: YYYY-MM-DD. Only dates after 1900 allowed!']
+        assert 'license_id' in errors_unflattened
+        assert 'temporal_granularity' in errors_unflattened
+        assert 'geographical_granularity' in errors_unflattened
+        assert 'geographical_coverage' in errors_unflattened
 
         flat_extras = {}
         for extra in converted_data['extras']:

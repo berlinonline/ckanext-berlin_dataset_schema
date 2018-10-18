@@ -167,6 +167,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({'attribution_text': [
             toolkit.get_converter('convert_to_extras')
         ]})
+        schema.update({'license_id': [
+            validator.is_license_id
+        ]})
         schema.update({'username': [
             toolkit.get_converter('convert_to_extras')
         ]})
@@ -179,8 +182,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_granularity': [
-            # TODO: add validation
-            # berlin_validators.contained_in_enum,
+            validator.is_temporal_granularity ,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_coverage_from': [
@@ -192,13 +194,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'geographical_granularity': [
-            # TODO: add validation
-            # berlin_validators.contained_in_enum,
+            validator.is_geo_granularity ,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'geographical_coverage': [
-            # TODO: add validation
-            # berlin_validators.contained_in_enum,
+            validator.is_geo_feature ,
             toolkit.get_converter('convert_to_extras')
         ]})
 

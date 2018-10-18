@@ -36,6 +36,35 @@ class Validator(object):
         enum = self.json_schema.enum_for_attribute('berlin_type')
         return enum
 
+    def license_ids(self):
+        """
+        Return the currently valid values of 'license_id'.
+        """
+        enum = self.json_schema.enum_for_attribute('license_id')
+        return enum
+
+    def geo_features(self):
+        """
+        Return the currently valid values of 'geographical_coverage'.
+        """
+        enum = self.json_schema.enum_for_attribute('geographical_coverage')
+        return enum
+
+    def geo_granularities(self):
+        """
+        Return the currently valid values of 'geographical_granularity'.
+        """
+        enum = self.json_schema.enum_for_attribute('geographical_granularity')
+        return enum
+
+    def temporal_granularities(self):
+        """
+        Return the currently valid values of 'temporal_granularity'.
+        """
+        enum = self.json_schema.enum_for_attribute('temporal_granularity')
+        return enum
+
+
     def isodate_notime(self, value):
         """
         Validator function to check that a value corresponds to the
@@ -64,21 +93,53 @@ class Validator(object):
     def is_in_enum(self, value, value_space):
         """
         Helper that checks if `value` is contained in `value_space`.
-        Returns `value` if it is contained, raises `Invalid` error if not.
+        Returns `value` if it is contained, raises Exception if not.
         """
         if isinstance(value_space, list):
             if value in value_space:
                 return value
             else:
+                quoted = [ '\'{}\''.format(x.encode('utf-8')) for x in value_space ]
                 raise df.Invalid(
-                    _('`{}` is not one of [ {} ].'.format(value, ', '.join(value_space))))
-        raise Exception('`value_space` must be a list.')
+                    _('\'{}\' is not one of [ {} ].'.format(value, ', '.join(quoted))))
+        raise Exception('\'value_space\' must be a list.')
 
     def is_berlin_type(self, value):
         """
         Validator function to check that a value is one of ['datensatz', 'dokument', 'app'].
         """
         value_space = self.berlin_types()
+        return self.is_in_enum(value, value_space)
+
+    def is_license_id(self, value):
+        """
+        Validator function to check that a value is one of the currently available license ids.
+        """
+        value_space = self.license_ids()
+        return self.is_in_enum(value, value_space)
+
+    def is_geo_feature(self, value):
+        """
+        Validator function to check that a value is one of the currently available
+        values for geographical coverage.
+        """
+        value_space = self.geo_features()
+        return self.is_in_enum(value, value_space)
+
+    def is_geo_granularity(self, value):
+        """
+        Validator function to check that a value is one of the currently available
+        values for geographical granularity.
+        """
+        value_space = self.geo_granularities()
+        return self.is_in_enum(value, value_space)
+
+    def is_temporal_granularity(self, value):
+        """
+        Validator function to check that a value is one of the currently available
+        values for temporal granularity.
+        """
+        value_space = self.temporal_granularities()
         return self.is_in_enum(value, value_space)
 
     def is_group_name_valid(self, name, context):

@@ -71,6 +71,127 @@ class TestIsBerlinType:
 
 # -------------------
 
+class TestIsLicenseId:
+    """
+    Tests for validation.is_license_id() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    @raises(df.Invalid)
+    def test_is_license_id_raises_invalid_error_for_bad_value(self):
+        self.validator.is_license_id('unlicensed')
+
+    def test_is_license_id_gives_correct_answer(self):
+        license_ids = [ 'cc-by', 'cc-zero', 'cc-by-sa', 'cc-nc', 'dl-de-2-0', 'geonutzv', 'geonutz-be-2013-10-01', 'odc-odbl', 'other-closed' ]
+        for _id in license_ids:
+            actual = self.validator.is_license_id(_id)
+            expected = _id
+            assert actual is expected, "%s != %s" % ( actual, expected)
+
+# -------------------
+
+class TestIsGeoFeature:
+    """
+    Tests for validation.is_geo_feature() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    @raises(df.Invalid)
+    def test_is_geo_feature_raises_invalid_error_for_bad_value(self):
+        self.validator.is_geo_feature('Hamburg')
+
+    def test_is_geo_feature_gives_correct_answer(self):
+        geo_features = [
+            u'Adlershof',
+            u'Grünau',
+            u'Märkisches Viertel',
+            u'Müggelheim',
+            u'Neu-Hohenschönhausen',
+            u'Neukölln',
+            u'Niederschöneweide',
+            u'Nikolassee',
+            u'Weißensee',
+        ]
+        for _feature in geo_features:
+            actual = self.validator.is_geo_feature(_feature)
+            expected = _feature
+            assert actual is expected, "%s != %s" % ( actual, expected)
+
+# -------------------
+
+class TestIsGeoGranularity:
+    """
+    Tests for validation.is_geo_granularity() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    @raises(df.Invalid)
+    def test_is_geo_granularity_raises_invalid_error_for_bad_value(self):
+        self.validator.is_geo_granularity('Dumdum')
+
+    def test_is_geo_granularity_gives_correct_answer(self):
+        geo_granularities = [ 
+            'Deutschland',
+            'Berlin',
+            'Bezirk',
+            'Ortsteil',
+            'Prognoseraum',
+            'Bezirksregion',
+            'Planungsraum',
+            'Block',
+            'Einschulbereich',
+            'Kontaktbereich',
+            'PLZ',
+            'Stimmbezirk',
+            'Quartiersmanagement',
+            'Wohnanlage',
+            'Wahlkreis'
+        ]
+        for _granularity in geo_granularities:
+            actual = self.validator.is_geo_granularity(_granularity)
+            expected = _granularity
+            assert actual is expected, "%s != %s" % ( actual, expected)
+
+# -------------------
+
+class TestIsTemporalGranularity:
+    """
+    Tests for validation.is_temporal_granularity() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    @raises(df.Invalid)
+    def test_is_temporal_granularity_raises_invalid_error_for_bad_value(self):
+        self.validator.is_temporal_granularity('Dumdum')
+
+    def test_is_temporal_granularity_gives_correct_answer(self):
+        temporal_granularities = [ 
+            'Keine',
+            '5 Jahre',
+            'Jahr',
+            'Quartal',
+            'Monat',
+            'Woche',
+            'Tag',
+            'Stunde',
+            'Minute',
+            'Sekunde'
+        ]
+        for _granularity in temporal_granularities:
+            actual = self.validator.is_temporal_granularity(_granularity)
+            expected = _granularity
+            assert actual is expected, "%s != %s" % ( actual, expected)
+
+# -------------------
+
 class TestIsInEnum:
     """
     Tests for validation.is_in_enum() helper (mostly covered by other test classes).
@@ -83,6 +204,8 @@ class TestIsInEnum:
     def test_is_in_enum_valuespace_must_be_list(self):
         self.validator.is_in_enum('foo', 'bar')
 
+
+# -------------------
 
 class TestIsGroupNameValid:
     """
