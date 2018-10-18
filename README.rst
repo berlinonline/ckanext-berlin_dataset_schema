@@ -9,9 +9,9 @@
   :target: https://coveralls.io/r/berlinonline/ckanext-berlin_dataset_schema
 
 
-=============
+=============================
 ckanext-berlin_dataset_schema
-=============
+=============================
 
 Implementation of IDatasetForm to provide a custom dataset schema for the `Berlin Open Data Portal <https://daten.berlin.de>`_. 
 
@@ -31,11 +31,6 @@ This plugin has been tested with CKAN 2.7.3.
 Running the Tests
 -----------------
 
-To run the tests, do::
+To run the tests, you need to be in an environment where CKAN is installed and set up (database, etc.). Then run::
 
-    nosetests --nologcapture --with-pylons=test.ini
-
-To run the tests and produce a coverage report, first make sure you have
-coverage installed in your virtualenv (``pip install coverage``) then run::
-
-    nosetests --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.berlin_dataset_schema --cover-inclusive --cover-erase --cover-tests
+    nosetests --ckan --with-pylons=test.ini --with-coverage --cover-package=ckanext.berlin_dataset_schema --cover-inclusive --cover-erase --cover-html ckanext/berlin_dataset_schema/tests/
