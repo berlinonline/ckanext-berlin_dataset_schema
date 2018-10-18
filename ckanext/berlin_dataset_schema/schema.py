@@ -5,7 +5,10 @@ Datenregister packages.
 """
 
 import json
+import logging
 import ckan.plugins as plugins
+
+log = logging.getLogger(__name__)
 
 class Schema(plugins.SingletonPlugin):
     """
@@ -16,10 +19,9 @@ class Schema(plugins.SingletonPlugin):
         """
         Load the schema.
         """
-        if not hasattr(self, '_schema'):
-            self._schema = {}
-            with open(schema_path) as json_data:
-                self._schema = json.load(json_data)
+        self._schema = {}
+        with open(schema_path) as json_data:
+            self._schema = json.load(json_data)
 
     def unload_schema(self):
         """
@@ -66,7 +68,22 @@ class Schema(plugins.SingletonPlugin):
             return None
         raise SchemaError("JSON Schema does not contain 'properties' attribute.")
 
-class SchemaError(BaseException):
+    def enum_for_attribute(self, attribute):
+        """
+        Helper function that returns the enum definition for a given attribute.
+        """
+        properties = self.schema().get('properties')
+        if properties:
+            if attribute in properties:
+                if 'enum' in properties[attribute]:
+                    return properties[attribute]['enum']
+                else:
+                    return None
+            else:
+                raise SchemaError("The attribute '{}' does not exist.".format(attribute))
+        raise SchemaError("JSON Schema does not contain 'properties' attribute.")
+
+class SchemaError(Exception):
     """
     Errors when handling the JSON schema.
     """

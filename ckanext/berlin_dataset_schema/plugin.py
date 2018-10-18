@@ -7,7 +7,6 @@ import logging
 import os
 
 from ckan.common import _
-import ckan.lib.navl.dictization_functions as df
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
@@ -131,7 +130,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         `ignore_missing`) to each attribute definition in the schema, but only if:
 
         - the loaded JSON schema contains the attribute
-        - it's not a sub-schema
+        - it's not a sub-schema (groups, resources, ...)
         """
         for attribute, validator_chain in schema.iteritems():
             if self.json_schema.contains(attribute):
@@ -156,8 +155,10 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         # - maintainer
         # - url
 
+        validator = berlin_validators.Validator()
+
         schema.update({'berlin_type': [
-            berlin_validators.is_berlin_type,
+            validator.is_berlin_type,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'berlin_source': [
@@ -170,11 +171,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'date_released': [
-            berlin_validators.isodate_notime,
+            validator.isodate_notime,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'date_updated': [
-            berlin_validators.isodate_notime,
+            validator.isodate_notime,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_granularity': [
@@ -183,11 +184,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_coverage_from': [
-            berlin_validators.isodate_notime,
+            validator.isodate_notime,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_coverage_to': [
-            berlin_validators.isodate_notime,
+            validator.isodate_notime,
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'geographical_granularity': [
@@ -211,6 +212,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
         https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.show_package_schema
         """
+
+        validator = berlin_validators.Validator()
+
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).show_package_schema()
         schema.update({
@@ -234,14 +238,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'date_released': [
                 toolkit.get_converter('convert_from_extras'),
-                berlin_validators.isodate_notime,
+                validator.isodate_notime,
                 toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'date_updated': [
                 toolkit.get_converter('convert_from_extras'),
-                berlin_validators.isodate_notime,
+                validator.isodate_notime,
                 toolkit.get_validator('ignore_missing')
             ]
         })
@@ -260,14 +264,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'temporal_coverage_from': [
                 toolkit.get_converter('convert_from_extras'),
-                berlin_validators.isodate_notime,
+                validator.isodate_notime,
                 toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'temporal_coverage_to': [
                 toolkit.get_converter('convert_from_extras'),
-                berlin_validators.isodate_notime,
+                validator.isodate_notime,
                 toolkit.get_validator('ignore_missing')
             ]
         })
@@ -290,6 +294,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         """
         Implementation of IDatasetForm.validate()
 
+        This is needed to make groups and other non-atomic properties required.
+
         https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.validate
         """
         _errors = {}
@@ -299,13 +305,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         if 'category' in data_dict:
             category = data_dict['category']
             groups = data_dict.get('groups', [])
-            data_dict['groups'] = groups + [ { 'name': category }]
+            data_dict['groups'] = groups + [ { 'name': category } ]
 
         # Check if the group names exist:
         for group in data_dict.get('groups', []):
             group_name = group.get('name', None)
-            if not berlin_validators.is_group_name_valid(group_name):
-                _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist.'.format(group_name)) ]
+            validator = berlin_validators.Validator()
+            if not validator.is_group_name_valid(group_name, context):
+                _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(group_name, context['user'])) ]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
         if action in [ 'package_create', 'package_update' ]:
