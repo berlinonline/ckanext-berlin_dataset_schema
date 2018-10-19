@@ -167,6 +167,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({'attribution_text': [
             toolkit.get_converter('convert_to_extras')
         ]})
+        schema.update({
+            'url': [
+                validator.is_valid_url
+            ]
+        })
         schema.update({'license_id': [
             validator.is_license_id
         ]})

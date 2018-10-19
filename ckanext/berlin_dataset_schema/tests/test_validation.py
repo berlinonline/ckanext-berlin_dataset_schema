@@ -50,6 +50,41 @@ class TestIsodateNotime:
 
 # -------------------
 
+class TestIsValidUrl:
+    """
+    Tests for validation.is_berlin_type() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    def test_valid_urls_are_accepted(self):
+        urls = [
+            "http://www.test.org" ,
+            "https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" ,
+            "https://daten.berlin.de/ref/geo/coverage" ,
+            "ftp://an.ftp.site" ,
+        ]
+        for url in urls:
+            assert self.validator.is_valid_url(url) == url
+
+    def test_invalid_urls_are_rejected(self):
+        urls = [
+            "noscheme" ,
+            " https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" , # trailing whitespace
+            "https://www.berlin.de/ sen/ wirtschaft/" , # internal whitespace
+            "foonz://www.berlin.de" , # unknown/invalid scheme
+            "https://www.berlin.de/sen/wirtschaft/  " , # trailing whitespace
+        ]
+        for url in urls:
+            yield self.check_valid_url, url
+
+    @raises(df.Invalid)
+    def check_valid_url(self, url):
+        self.validator.is_valid_url(url)
+
+# -------------------
+
 class TestIsBerlinType:
     """
     Tests for validation.is_berlin_type() validator.

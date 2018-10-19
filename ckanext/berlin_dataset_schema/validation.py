@@ -7,6 +7,8 @@ package schema.
 import logging
 from datetime import datetime
 import os
+import validators
+
 from ckan.common import _
 import ckan.logic as logic
 import ckan.model as model
@@ -90,6 +92,11 @@ class Validator(object):
             'dates after 1900 allowed!'))
         return date
 
+    def is_valid_url(self, value):
+        if not validators.url(value):
+            raise df.Invalid(_('URL seems to be invalid.'))
+        return value
+
     def is_in_enum(self, value, value_space):
         """
         Helper that checks if `value` is contained in `value_space`.
@@ -100,8 +107,8 @@ class Validator(object):
                 return value
             else:
                 quoted = [ '\'{}\''.format(x.encode('utf-8')) for x in value_space ]
-                raise df.Invalid(
-                    _('\'{}\' is not one of [ {} ].'.format(value, ', '.join(quoted))))
+                message = '\'{}\' is not one of [ {} ].'.format(value, ', '.join(quoted))
+                raise df.Invalid(_(message.decode('utf-8')))
         raise Exception('\'value_space\' must be a list.')
 
     def is_berlin_type(self, value):
