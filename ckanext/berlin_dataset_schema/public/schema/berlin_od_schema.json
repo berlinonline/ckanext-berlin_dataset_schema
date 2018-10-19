@@ -97,6 +97,7 @@
     "geographical_granularity": {
       "description": "Räumliche Auflösung: Die geographische Granularität des Datensatzes, eines Dokuments, einer App. Wird später zum Filtern verwendet.", 
       "enum": [
+        "Keine",
         "Deutschland",
         "Berlin",
         "Bezirk",
@@ -118,6 +119,7 @@
     "geographical_coverage": {
       "description": "Räumliche Abdeckung: der geographische Bereich, der von dem Datensatz, dem Dokument oder der App abgedeckt wird. Wird zum Filtern verwendet.",
       "enum": [
+        "Keine",
         "Adlershof",
         "Alt-Hohenschönhausen",
         "Alt-Treptow",

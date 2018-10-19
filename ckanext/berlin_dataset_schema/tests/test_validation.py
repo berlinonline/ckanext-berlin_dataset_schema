@@ -141,6 +141,7 @@ class TestIsGeoFeature:
 
     def test_is_geo_feature_gives_correct_answer(self):
         geo_features = [
+            u'Keine',
             u'Adlershof',
             u'Grünau',
             u'Märkisches Viertel',
@@ -171,7 +172,8 @@ class TestIsGeoGranularity:
         self.validator.is_geo_granularity('Dumdum')
 
     def test_is_geo_granularity_gives_correct_answer(self):
-        geo_granularities = [ 
+        geo_granularities = [
+            'Keine',
             'Deutschland',
             'Berlin',
             'Bezirk',
