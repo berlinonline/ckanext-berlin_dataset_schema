@@ -93,8 +93,9 @@ class Validator(object):
         return date
 
     def is_valid_url(self, value):
-        if not validators.url(value):
-            raise df.Invalid(_('URL seems to be invalid.'))
+        if value: # None, emtpy string is also valid
+            if not validators.url(value):
+                raise df.Invalid(_('URL seems to be invalid: "{}"'.format(value)))
         return value
 
     def is_in_enum(self, value, value_space):

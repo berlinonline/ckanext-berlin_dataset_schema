@@ -64,6 +64,7 @@ class TestIsValidUrl:
             "https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" ,
             "https://daten.berlin.de/ref/geo/coverage" ,
             "ftp://an.ftp.site" ,
+            "" # empty URL is valid (robustness, etc.)
         ]
         for url in urls:
             assert self.validator.is_valid_url(url) == url
