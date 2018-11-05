@@ -15,6 +15,9 @@ import ckan.model as model
 from ckan.common import c
 import ckan.lib.navl.dictization_functions as df
 
+from pylons.util import AttribSafeContextObj
+from werkzeug.local import LocalProxy
+
 from ckanext.berlin_dataset_schema.schema import Schema
 
 log = logging.getLogger(__name__)
@@ -150,15 +153,25 @@ class Validator(object):
         value_space = self.temporal_granularities()
         return self.is_in_enum(value, value_space)
 
-    def is_group_name_valid(self, name, context):
+    def is_group_name_valid(self, name, _context):
         """
         Check if a name is a valid group name for the current user (i.e., the user is authorized to
         add packages to this group).
+
+        Returns name is valid, raises df.Invalid if not.
         """
+        context = _context
+        if isinstance(_context, LocalProxy):
+            context = {
+                'author': getattr(_context, 'author') ,
+                'user': getattr(_context, 'user') ,
+                'userobj': getattr(_context, 'userobj')
+            }
         context['is_member'] = True
 
         users_groups = get_action('group_list_authz')(context, {})
         group_names = [ group['name'] for group in users_groups ]
         if name in group_names:
-            return True
-        return False
+            return name
+        else:
+            raise df.Invalid(_('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(name, context['user'])))

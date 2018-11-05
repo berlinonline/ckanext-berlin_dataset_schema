@@ -288,12 +288,13 @@ class TestIsGroupNameValid:
         for group_name in restricted_group_names:
             self.restricted_groups.append(factories.Group(name=group_name))
 
+    @raises(df.Invalid)
     def test_empty_is_an_invalid_group_name(self):
         """
         Group names that don't exist should be invalid.
         """
         context = { 'user': self.user['name'] }
-        assert self.validator.is_group_name_valid('empty', context) is False
+        self.validator.is_group_name_valid('empty', context)
 
     def test_group_names_are_valid_group_names(self):
         """
@@ -301,7 +302,7 @@ class TestIsGroupNameValid:
         """
         context = { 'user': self.user['name'] }
         for group in self.groups:
-            assert self.validator.is_group_name_valid(group['name'], context) is True
+            assert self.validator.is_group_name_valid(group['name'], context) is group['name']
 
     def test_restricted_group_is_invalid(self):
         """
@@ -309,4 +310,9 @@ class TestIsGroupNameValid:
         """
         context = { 'user': self.user['name'] }
         for group in self.restricted_groups:
-            assert self.validator.is_group_name_valid(group['name'], context) is False
+            result = True
+            try:
+                self.validator.is_group_name_valid(group['name'], context)
+            except df.Invalid:
+                result = False
+            assert result is False

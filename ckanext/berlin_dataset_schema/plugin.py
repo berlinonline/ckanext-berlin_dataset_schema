@@ -7,6 +7,7 @@ import logging
 import os
 
 from ckan.common import _
+import ckan.lib.navl.dictization_functions as df
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
@@ -20,6 +21,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     """
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
+    plugins.implements(plugins.IValidators)
 
     # -------------------------------------------------------------------
     # Implementation IConfigurer
@@ -155,10 +157,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         # - maintainer
         # - url
 
-        validator = berlin_validators.Validator()
-
         schema.update({'berlin_type': [
-            validator.is_berlin_type,
+            toolkit.get_converter('is_berlin_type'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'berlin_source': [
@@ -169,41 +169,41 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         ]})
         schema.update({
             'url': [
-                validator.is_valid_url
+                toolkit.get_converter('is_valid_url')
             ]
         })
         schema.update({'license_id': [
-            validator.is_license_id
+            toolkit.get_converter('is_license_id'),
         ]})
         schema.update({'username': [
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'date_released': [
-            validator.isodate_notime,
+            toolkit.get_converter('isodate_notime'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'date_updated': [
-            validator.isodate_notime,
+            toolkit.get_converter('isodate_notime'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_granularity': [
-            validator.is_temporal_granularity ,
+            toolkit.get_converter('is_temporal_granularity'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_coverage_from': [
-            validator.isodate_notime,
+            toolkit.get_converter('isodate_notime'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'temporal_coverage_to': [
-            validator.isodate_notime,
+            toolkit.get_converter('isodate_notime'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'geographical_granularity': [
-            validator.is_geo_granularity ,
+            toolkit.get_converter('is_geo_granularity'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema.update({'geographical_coverage': [
-            validator.is_geo_feature ,
+            toolkit.get_converter('is_geo_feature'),
             toolkit.get_converter('convert_to_extras')
         ]})
 
@@ -243,14 +243,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'date_released': [
                 toolkit.get_converter('convert_from_extras'),
-                validator.isodate_notime,
+                toolkit.get_converter('isodate_notime'),
                 toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'date_updated': [
                 toolkit.get_converter('convert_from_extras'),
-                validator.isodate_notime,
+                toolkit.get_converter('isodate_notime'),
                 toolkit.get_validator('ignore_missing')
             ]
         })
@@ -269,14 +269,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'temporal_coverage_from': [
                 toolkit.get_converter('convert_from_extras'),
-                validator.isodate_notime,
+                toolkit.get_converter('isodate_notime'),
                 toolkit.get_validator('ignore_missing')
             ]
         })
         schema.update({
             'temporal_coverage_to': [
                 toolkit.get_converter('convert_from_extras'),
-                validator.isodate_notime,
+                toolkit.get_converter('isodate_notime'),
                 toolkit.get_validator('ignore_missing')
             ]
         })
@@ -316,7 +316,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         for group in data_dict.get('groups', []):
             group_name = group.get('name', None)
             validator = berlin_validators.Validator()
-            if not validator.is_group_name_valid(group_name, context):
+            try:
+                validator.is_group_name_valid(group_name, context)
+            except df.Invalid, e:
                 _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(group_name, context['user'])) ]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
@@ -328,3 +330,26 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             errors['groups'] = errors.get('groups', []) + _errors['groups']
 
         return (data_dict, errors)
+
+    # -------------------------------------------------------------------
+    # Implementation IValidators
+    # -------------------------------------------------------------------
+
+    def get_validators(self):
+        """
+        Implementation of IValidators.get_validators()
+
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators.get_validators
+        """
+        validator = berlin_validators.Validator()
+
+        return {
+            "isodate_notime": validator.isodate_notime ,
+            "is_valid_url": validator.is_valid_url ,
+            "is_berlin_type": validator.is_berlin_type ,
+            "is_license_id": validator.is_license_id ,
+            "is_geo_feature": validator.is_geo_feature ,
+            "is_geo_granularity": validator.is_geo_granularity ,
+            "is_temporal_granularity": validator.is_temporal_granularity ,
+            "is_group_name_valid": validator.is_group_name_valid
+        }
