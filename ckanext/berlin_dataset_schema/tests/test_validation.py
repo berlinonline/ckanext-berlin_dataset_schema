@@ -316,3 +316,11 @@ class TestIsGroupNameValid:
             except df.Invalid:
                 result = False
             assert result is False
+
+    def test_context_is_normalized_correctly(self):
+        """
+        context of type AttribSafeContextObj should be normalized to a dict.
+        """
+        import pylons
+        context = pylons.util.AttribSafeContextObj()
+        assert isinstance(self.validator.normalize_context(context), dict)

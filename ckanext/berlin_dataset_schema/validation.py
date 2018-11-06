@@ -160,13 +160,7 @@ class Validator(object):
 
         Returns name is valid, raises df.Invalid if not.
         """
-        context = _context
-        if isinstance(_context, LocalProxy):
-            context = {
-                'author': getattr(_context, 'author') ,
-                'user': getattr(_context, 'user') ,
-                'userobj': getattr(_context, 'userobj')
-            }
+        context = self.normalize_context(_context)
         context['is_member'] = True
 
         users_groups = get_action('group_list_authz')(context, {})
@@ -175,3 +169,17 @@ class Validator(object):
             return name
         else:
             raise df.Invalid(_('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(name, context['user'])))
+
+    def normalize_context(self, _context):
+        """
+        Ensure that context is always a dict, so we can manipulate and test it uniformly.
+        """
+        context = _context
+        import pylons
+        if isinstance(_context, LocalProxy) or isinstance(context, pylons.util.AttribSafeContextObj):
+            context = {
+                'author': getattr(_context, 'author') ,
+                'user': getattr(_context, 'user') ,
+                'userobj': getattr(_context, 'userobj')
+            }
+        return context
