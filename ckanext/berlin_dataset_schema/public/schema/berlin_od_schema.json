@@ -28,7 +28,8 @@
     "berlin_type": {
       "description": "Typ: Zeigt an, ob ein Datensatz, ein Dokument, eine App beschrieben wird. Entscheidet darüber, in welchem Bereich diese Metadaten angezeigt werden.", 
       "type": "string", 
-      "enum": ["datensatz", "dokument", "app"]
+      "enum": ["datensatz", "dokument", "app"] ,
+      "validator": "is_berlin_type"
     },
     "berlin_source": {
       "description": "Intern genutztes Merkmal, das die Eingabeart des Datensatzes unterscheidet. Werte können etwa 'api-xyz' (über die CKAN API ins Datenregister gepusht), 'harvest-xyz' (über einen Harvester vom Datenregister gepullt), 'simplesearch' (über das Imperia CMS erzeugt) oder 'webform' (direkt im Datenregister über das Webformular erzeugt) sein.",
@@ -55,7 +56,8 @@
     "url": {
       "description": "Website: Die ursprüngliche Webadresse des Datensatzes, Dokuments oder der App, um zu weiteren Informationen über den Datensatz, das Dokument oder die App zu gelangen. Wird auf der Detailseite als Link angezeigt.", 
       "type": "string", 
-      "format": "uri"
+      "format": "uri",
+      "validator": "is_valid_url"
     }, 
     "notes": {
       "description": "Beschreibung: Beschreibung und weitere Informationen zum Datensatz, zum Dokument oder zur App, wird auf der Detailseite dargestellt und kann mehrere Absätze umfassen.",
@@ -74,7 +76,8 @@
         "other-closed"
       ],
       "type": "string", 
-      "description": "Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a>"
+      "description": "Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a>",
+      "validator": "is_license_id"
     },
     "attribution_text": {
       "description": "Der exakte Text, der im Rahmen der Namensnennung anzugeben ist." ,
@@ -87,12 +90,14 @@
     "date_released": {
       "description": "Veröffentlichungsdatum: Wann wurden dieser Datensatz erstmalig angelegt/erzeugt? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem der Datensatz in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.",
       "type": "string", 
-      "format": "date-time"
+      "format": "date-time",
+      "validator": "isodate_notime"
     },
     "date_updated": {
       "description": "Änderungsgsdatum: Wann wurden dieser Datensatz geändert? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem die geänderten Daten in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.",
       "type": "string", 
-      "format": "date-time"
+      "format": "date-time",
+      "validator": "isodate_notime"
     },
     "geographical_granularity": {
       "description": "Räumliche Auflösung: Die geographische Granularität des Datensatzes, eines Dokuments, einer App. Wird später zum Filtern verwendet.", 
@@ -114,7 +119,8 @@
         "Wohnanlage",
         "Wahlkreis"
       ],
-      "type": "string"
+      "type": "string",
+      "validator": "is_geo_granularity"
     },
     "geographical_coverage": {
       "description": "Räumliche Abdeckung: der geographische Bereich, der von dem Datensatz, dem Dokument oder der App abgedeckt wird. Wird zum Filtern verwendet.",
@@ -214,17 +220,20 @@
         "Wittenau",
         "Zehlendorf"
       ],
-      "type": "string"
+      "type": "string",
+      "validator": "is_geo_feature"
     },
     "temporal_coverage_from": {
       "description": "Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
       "type": "string", 
-      "format": "date-time"
+      "format": "date-time",
+      "validator": "isodate_notime"
     }, 
     "temporal_coverage_to": {
       "description": "End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
       "type": "string", 
-      "format": "date-time"
+      "format": "date-time",
+      "validator": "isodate_notime"
     }, 
     "temporal_granularity": {
       "description": "Zeitliche Auflösung: Die zeitliche Auflösung der enthaltenen Daten, des Dokuments oder der App. Wird später zum Filtern verwendet.", 
@@ -240,7 +249,8 @@
         "Stunde",
         "Minute",
         "Sekunde"
-      ]
+      ],
+      "validator": "is_temporal_granularity"
     },
     "apps": {
       "description": "Anwendungen, die auf diesen Datensatz aufbauen. Sind als komma-getrennte Liste von URLs einzutragen.",
