@@ -2,6 +2,10 @@
 
 ## Development
 
+## 0.1.1
+
+- Plugin now implements [IValidators](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators) interface to expose the validator functions in [validation.py](ckanext/berlin_dataset_schema/validation.py).
+
 ## 0.1.0
 
 - Package validation has been enabled.
