@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Berlin Open Data Schema",
-  "description": "Schema to describe and validate dataset descriptions for the <a href='http://daten.berlin.de'>Berlin Open Data Portal</a>.",
+  "description": "Schema to describe and validate dataset descriptions for the <a href='https://daten.berlin.de'>Berlin Open Data Portal</a>.",
   "type": "object",
   "required": [ 
     "title",
