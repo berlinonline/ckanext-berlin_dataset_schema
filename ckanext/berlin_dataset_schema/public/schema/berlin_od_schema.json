@@ -75,6 +75,17 @@
         "odc-odbl",
         "other-closed"
       ],
+      "labels": [
+        "Creative Commons Attribution" ,
+        "Creative Commons Zero" ,
+        "Creative Commons Attribution Share-Alike" ,
+        "Creative Commons Non-Commercial (Any)" ,
+        "Datenlizenz Deutschland 2.0" ,
+        "GeoNutzV" ,
+        "GeoNutzV-Berlin" ,
+        "Open Data Commons Open Database License" ,
+        "Siehe Website des Datensatzes"
+      ],
       "type": "string", 
       "description": "Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a>",
       "validator": "is_license_id"
@@ -117,7 +128,9 @@
         "Stimmbezirk",
         "Quartiersmanagement",
         "Wohnanlage",
-        "Wahlkreis"
+        "Wahlkreis",
+        "Hausnummer",
+        "GPS-Koordinaten"
       ],
       "type": "string",
       "validator": "is_geo_granularity"
@@ -265,31 +278,51 @@
         "properties": {
           "name": {
             "enum": [
-              "gesundheit", 
-              "geo", 
-              "transport", 
-              "verkehr", 
-              "jugend", 
-              "verentsorgung", 
-              "demographie", 
-              "sicherheit", 
-              "protokolle", 
-              "wahl", 
-              "erholung", 
-              "wohnen", 
-              "sozial", 
-              "umwelt", 
-              "wirtschaft", 
-              "verwaltung", 
-              "sonstiges", 
-              "oeffentlich", 
-              "kultur", 
-              "justiz", 
-              "verbraucher", 
               "arbeit", 
               "bildung", 
-              "tourismus"
+              "demographie", 
+              "erholung", 
+              "gesundheit", 
+              "jugend", 
+              "justiz", 
+              "kultur", 
+              "oeffentlich", 
+              "sicherheit", 
+              "sozial", 
+              "tourismus" ,
+              "transport", 
+              "umwelt", 
+              "verbraucher", 
+              "verentsorgung", 
+              "verkehr", 
+              "verwaltung", 
+              "wahl", 
+              "wirtschaft", 
+              "wohnen"
             ], 
+            "labels": [
+              "Arbeitsmarkt" ,
+              "Bildung" ,
+              "Demographie" ,
+              "Erhohlung" ,
+              "Gesundheit" ,
+              "Jugend" ,
+              "Justiz" ,
+              "Kunst und Kultur" ,
+              "Öffentliche Verwaltung, Haushalt und Steuern" ,
+              "Sicherheit" ,
+              "Sozialleistungen" ,
+              "Tourismus" ,
+              "Transport" ,
+              "Umwelt und Klima" ,
+              "Verbraucherschutz" ,
+              "Ver- und Entsorgung" ,
+              "Verkehr" ,
+              "Verwaltung" ,
+              "Wahlen" ,
+              "Wirtschaft" ,
+              "Wohnen und Immobilien"
+            ] ,
             "type": "string"
           }
         }
