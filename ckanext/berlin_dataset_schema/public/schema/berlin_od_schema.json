@@ -265,10 +265,6 @@
       ],
       "validator": "is_temporal_granularity"
     },
-    "apps": {
-      "description": "Anwendungen, die auf diesen Datensatz aufbauen. Sind als komma-getrennte Liste von URLs einzutragen.",
-      "type": "string"
-    },
     "groups": {
       "description": "Kategorien: Kategorien für die Datensätze und Dokumente. Die Kategorien sind statisch und werden vom Portalbetreiber langfristig gepflegt.",
       "type": "array",

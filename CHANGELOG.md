@@ -2,6 +2,10 @@
 
 ## Development
 
+## 0.1.2
+
+- Bump schema to [version 2.1](https://github.com/knudmoeller/berlin_od_schema/tree/2.1).
+
 ## 0.1.1
 
 - Plugin now implements [IValidators](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators) interface to expose the validator functions in [validation.py](ckanext/berlin_dataset_schema/validation.py).
