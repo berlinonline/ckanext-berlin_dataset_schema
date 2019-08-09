@@ -2,9 +2,13 @@
 
 ## Development
 
+## 0.1.3
+
+- Bump schema to [version 2.2](https://github.com/berlinonline/berlin_od_schema/tree/2.2).
+
 ## 0.1.2
 
-- Bump schema to [version 2.1](https://github.com/knudmoeller/berlin_od_schema/tree/2.1).
+- Bump schema to [version 2.1](https://github.com/berlinonline/berlin_od_schema/tree/2.1).
 
 ## 0.1.1
 
