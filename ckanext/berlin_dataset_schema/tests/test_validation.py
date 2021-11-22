@@ -12,15 +12,6 @@ from ckanext.berlin_dataset_schema.validation import Validator
 
 log = logging.getLogger(__name__)
 
-# workaround for missing translator object from 
-# https://github.com/ckan/ckanext-dcat/commit/bd490115da8087a14b9a2ef603328e69535144bb
-from paste.registry import Registry
-from ckan.lib.cli import MockTranslator
-registry = Registry()
-registry.prepare()
-from pylons import translator
-registry.register(translator, MockTranslator())
-
 class TestIsodateNotime:
     """
     Tests for validation.isodate_notime() validator.
@@ -318,10 +309,3 @@ class TestIsGroupNameValid:
                 result = False
             assert result is False
 
-    def test_context_is_normalized_correctly(self):
-        """
-        context of type AttribSafeContextObj should be normalized to a dict.
-        """
-        import pylons
-        context = pylons.util.AttribSafeContextObj()
-        assert isinstance(self.validator.normalize_context(context), dict)
