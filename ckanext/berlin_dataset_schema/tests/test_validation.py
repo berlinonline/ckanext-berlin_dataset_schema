@@ -4,6 +4,7 @@
 import logging
 from datetime import datetime
 from nose.tools import raises
+import pytest
 import ckan.lib.navl.dictization_functions as df
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers

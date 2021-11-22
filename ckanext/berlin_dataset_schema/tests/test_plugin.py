@@ -3,6 +3,7 @@
 
 import logging
 import mock
+import pytest
 
 import ckan.logic as logic
 import ckan.plugins

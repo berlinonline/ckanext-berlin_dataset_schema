@@ -1,2 +1,7 @@
 #! /bin/bash
-nosetests -s --ckan --with-pylons=test.ini --with-coverage --cover-package=ckanext.berlin_dataset_schema --cover-inclusive --cover-erase --cover-html ckanext/berlin_dataset_schema/tests/
+
+export CKAN_INI="/usr/lib/ckan/default/src/ckan/test-core.ini"
+
+# delete .pyc-files to prevent the "import file mismatch" errors
+find -name "*.pyc" -delete
+coverage run --source=ckanext.berlin_dataset_schema -m pytest ckanext/berlin_dataset_schema/tests && coverage html

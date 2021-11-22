@@ -2,6 +2,9 @@
 
 ## Development
 
+- Convert from Python 2 to Python 3:
+  - Switch testing framework from Nose to Pytest.
+
 ## 0.1.3
 
 - Bump schema to [version 2.2](https://github.com/berlinonline/berlin_od_schema/tree/2.2).
