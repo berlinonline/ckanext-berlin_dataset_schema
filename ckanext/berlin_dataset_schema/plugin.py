@@ -318,7 +318,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             validator = berlin_validators.Validator()
             try:
                 validator.is_group_name_valid(group_name, context)
-            except df.Invalid, e:
+            except df.Invalid as e:
                 _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(group_name, context['user'])) ]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
