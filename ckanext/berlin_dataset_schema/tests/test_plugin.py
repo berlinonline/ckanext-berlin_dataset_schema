@@ -133,9 +133,9 @@ class TestSchemaGeneration(object):
         - Are missing properties marked as missing?
         - Are invalid dates marked as such?
         - Is an invalid license_ids marked as such?
-        - Is an invalid geographical_coverage markes as such?
-        - Is an invalid geographical_granularity markes as such?
-        - Is an invalid temporal_granularity markes as such?
+        - Is an invalid geographical_coverage marked as such?
+        - Is an invalid geographical_granularity marked as such?
+        - Is an invalid temporal_granularity marked as such?
         - Non-standard properties in the data are turned into extras.
         """
         package_plugin = lib_plugins.lookup_package_plugin()
