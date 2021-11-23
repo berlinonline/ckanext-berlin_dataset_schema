@@ -75,9 +75,6 @@ class Validator(object):
         Valid datetimes that extend beyond that pattern will be 
         shortened to YYYY-MM-DD, empty values will be transformed to None.
 
-        Due to limitations of earlier versions of Python, dates past 
-        1900 will cause an Exception.
-
         value -- the date value to be validated
         """
         if isinstance(value, datetime):
@@ -88,8 +85,7 @@ class Validator(object):
             date = datetime.strptime(value[:10], "%Y-%m-%d")
             date = date.__format__("%Y-%m-%d")
         except (TypeError, ValueError):
-            raise df.Invalid(_('Date format incorrect. Use ISO8601: YYYY-MM-DD. Only ' + \
-            'dates after 1900 allowed!'))
+            raise df.Invalid(_('Date format incorrect. Use ISO8601: YYYY-MM-DD.'))
         return date
 
     def is_valid_url(self, value):

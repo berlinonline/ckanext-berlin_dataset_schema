@@ -36,10 +36,6 @@ class TestIsodateNotime:
     def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error(self):
         self.validator.isodate_notime("foor bar")
 
-    @raises(ValueError)
-    def test_isodate_notime_datetime_date_before_1900_raises_value_error(self):
-        self.validator.isodate_notime(datetime(1869, 9, 6, 7, 43, 23, 10))
-
 # -------------------
 
 class TestIsValidUrl:

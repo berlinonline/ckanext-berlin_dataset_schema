@@ -144,7 +144,7 @@ class TestSchemaGeneration(object):
             'name': 'foo_bar' ,
             'title': 'Foo Bar' ,
             'date_released': 'foo' ,
-            'temporal_coverage_to': '1855-06-06' ,
+            'temporal_coverage_to': '1855-13-06' ,
             'license_id': 'unlicensed' ,
             'temporal_granularity': 'foo' ,
             'geographical_coverage': 'Hamburg' ,
@@ -165,7 +165,7 @@ class TestSchemaGeneration(object):
         for prop in missing:
             assert errors_unflattened[prop] == ['Missing value']
         for prop in bad_date:
-            assert errors_unflattened[prop] == ['Date format incorrect. Use ISO8601: YYYY-MM-DD. Only dates after 1900 allowed!']
+            assert errors_unflattened[prop] == ['Date format incorrect. Use ISO8601: YYYY-MM-DD.']
         assert 'license_id' in errors_unflattened
         assert 'temporal_granularity' in errors_unflattened
         assert 'geographical_granularity' in errors_unflattened
