@@ -226,7 +226,7 @@ class TestIsInEnum:
         self.validator = Validator()
 
     def test_is_in_enum_valuespace_must_be_list(self):
-        with pytest.raises(Exception):
+        with pytest.raises(df.Invalid):
             self.validator.is_in_enum('foo', 'bar')
 
 
