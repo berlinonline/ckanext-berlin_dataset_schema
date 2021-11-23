@@ -134,7 +134,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         - the loaded JSON schema contains the attribute
         - it's not a sub-schema (groups, resources, ...)
         """
-        for attribute, validator_chain in schema.iteritems():
+        for attribute, validator_chain in schema.items():
             if self.json_schema.contains(attribute):
                 attribute_type = self.json_schema.attribute_type(attribute)
                 if attribute_type != "array":

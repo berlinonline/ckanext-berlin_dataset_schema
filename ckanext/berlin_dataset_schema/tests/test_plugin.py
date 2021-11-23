@@ -176,7 +176,7 @@ class TestSchemaGeneration(object):
             key = extra['key']
             flat_extras[key] = extra['value']
 
-        for key, value in flat_extras.iteritems():
+        for key, value in flat_extras.items():
             assert value is data[key]
 
     def setup_group(self, _name):
