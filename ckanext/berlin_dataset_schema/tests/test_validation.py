@@ -3,7 +3,6 @@
 
 import logging
 from datetime import datetime
-from nose.tools import raises
 import pytest
 import ckan.lib.navl.dictization_functions as df
 import ckan.tests.factories as factories
@@ -32,9 +31,9 @@ class TestIsodateNotime:
     def test_isodate_notime_illegal_string_after_date_is_ignored(self):
         assert self.validator.isodate_notime("1969-09-06foo bar") == "1969-09-06"
 
-    @raises(df.Invalid)
     def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error(self):
-        self.validator.isodate_notime("foor bar")
+        with pytest.raises(df.Invalid):
+            self.validator.isodate_notime("foor bar")
 
 # -------------------
 
@@ -68,9 +67,9 @@ class TestIsValidUrl:
         for url in urls:
             yield self.check_valid_url, url
 
-    @raises(df.Invalid)
     def check_valid_url(self, url):
-        self.validator.is_valid_url(url)
+        with pytest.raises(df.Invalid):
+            self.validator.is_valid_url(url)
 
 # -------------------
 
@@ -82,9 +81,9 @@ class TestIsBerlinType:
     def setup(self):
         self.validator = Validator()
 
-    @raises(df.Invalid)
     def test_is_berlin_type_raises_invalid_error_for_bad_value(self):
-        self.validator.is_berlin_type('goo star')
+        with pytest.raises(df.Invalid):
+            self.validator.is_berlin_type('goo star')
 
     def test_is_berlin_type_gives_correct_answer(self):
         berlin_types = [ 'datensatz', 'dokument', 'app' ]
@@ -103,9 +102,9 @@ class TestIsLicenseId:
     def setup(self):
         self.validator = Validator()
 
-    @raises(df.Invalid)
     def test_is_license_id_raises_invalid_error_for_bad_value(self):
-        self.validator.is_license_id('unlicensed')
+        with pytest.raises(df.Invalid):
+            self.validator.is_license_id('unlicensed')
 
     def test_is_license_id_gives_correct_answer(self):
         license_ids = ["cc-by", "cc-by/4.0", "cc-zero", "cc-by-sa", "cc-nc", "dl-de-zero-2.0", "dl-de-by-2.0", "odc-odbl", "other-closed" ]
@@ -124,9 +123,9 @@ class TestIsGeoFeature:
     def setup(self):
         self.validator = Validator()
 
-    @raises(df.Invalid)
     def test_is_geo_feature_raises_invalid_error_for_bad_value(self):
-        self.validator.is_geo_feature('Hamburg')
+        with pytest.raises(df.Invalid):
+            self.validator.is_geo_feature('Hamburg')
 
     def test_is_geo_feature_gives_correct_answer(self):
         geo_features = [
@@ -156,9 +155,9 @@ class TestIsGeoGranularity:
     def setup(self):
         self.validator = Validator()
 
-    @raises(df.Invalid)
     def test_is_geo_granularity_raises_invalid_error_for_bad_value(self):
-        self.validator.is_geo_granularity('Dumdum')
+        with pytest.raises(df.Invalid):
+            self.validator.is_geo_granularity('Dumdum')
 
     def test_is_geo_granularity_gives_correct_answer(self):
         geo_granularities = [
@@ -194,9 +193,9 @@ class TestIsTemporalGranularity:
     def setup(self):
         self.validator = Validator()
 
-    @raises(df.Invalid)
     def test_is_temporal_granularity_raises_invalid_error_for_bad_value(self):
-        self.validator.is_temporal_granularity('Dumdum')
+        with pytest.raises(df.Invalid):
+            self.validator.is_temporal_granularity('Dumdum')
 
     def test_is_temporal_granularity_gives_correct_answer(self):
         temporal_granularities = [ 
@@ -226,9 +225,9 @@ class TestIsInEnum:
     def setup(self):
         self.validator = Validator()
 
-    @raises(Exception)
     def test_is_in_enum_valuespace_must_be_list(self):
-        self.validator.is_in_enum('foo', 'bar')
+        with pytest.raises(Exception):
+            self.validator.is_in_enum('foo', 'bar')
 
 
 # -------------------
@@ -276,13 +275,13 @@ class TestIsGroupNameValid:
         for group_name in restricted_group_names:
             self.restricted_groups.append(factories.Group(name=group_name))
 
-    @raises(df.Invalid)
     def test_empty_is_an_invalid_group_name(self):
         """
         Group names that don't exist should be invalid.
         """
         context = { 'user': self.user['name'] }
-        self.validator.is_group_name_valid('empty', context)
+        with pytest.raises(df.Invalid):
+            self.validator.is_group_name_valid('empty', context)
 
     def test_group_names_are_valid_group_names(self):
         """
