@@ -2,8 +2,11 @@
 
 ## Development
 
-- Convert from Python 2 to Python 3:
-  - Switch testing framework from Nose to Pytest.
+- Convert from Python 2 to Python 3.
+- Switch testing framework from Nose to Pytest.
+- Switch CI from travis to gh-actions.
+- Switch from RST to Markdown in README.
+
 
 ## 0.1.3
 
