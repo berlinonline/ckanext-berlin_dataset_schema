@@ -105,7 +105,7 @@ class Validator(object):
             else:
                 quoted = [ '\'{}\''.format(x.encode('utf-8')) for x in value_space ]
                 message = '\'{}\' is not one of [ {} ].'.format(value, ', '.join(quoted))
-                raise df.Invalid(_(message.decode('utf-8')))
+                raise df.Invalid(_(message))
         raise Exception('\'value_space\' must be a list.')
 
     def is_berlin_type(self, value):
