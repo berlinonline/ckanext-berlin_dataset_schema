@@ -55,9 +55,8 @@ jobs:
     - name: Setup extension (CKAN >= 2.9)
       run: |
         ckan -c test.ini db init
-        ckan -c test.ini harvester initdb
     - name: Run tests
-      run: pytest --ckan-ini=test.ini --cov=ckanext.dcat --cov-report=xml --cov-append --disable-warnings ckanext/berlin_dataset_schema/tests
+      run: pytest --ckan-ini=test.ini --cov=ckanext.berlin_dataset_schema --cov-report=xml --cov-append --disable-warnings ckanext/berlin_dataset_schema/tests
     - name: Upload coverage report to codecov
       uses: codecov/codecov-action@v1
       with:
