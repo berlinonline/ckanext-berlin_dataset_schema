@@ -80,7 +80,7 @@ class Schema(plugins.SingletonPlugin):
                 else:
                     return None
             else:
-                raise SchemaError("The attribute '{}' does not exist.".format(attribute))
+                raise SchemaError(f"The attribute '{attribute}' does not exist.")
         raise SchemaError("JSON Schema does not contain 'properties' attribute.")
 
 class SchemaError(Exception):

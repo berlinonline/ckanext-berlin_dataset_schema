@@ -91,7 +91,7 @@ class Validator(object):
     def is_valid_url(self, value):
         if value: # None, emtpy string is also valid
             if not validators.url(value):
-                raise df.Invalid(_('URL seems to be invalid: "{}"'.format(value)))
+                raise df.Invalid(_(f'URL seems to be invalid: "{value}"'))
         return value
 
     def is_in_enum(self, value, value_space):
@@ -103,8 +103,8 @@ class Validator(object):
             if value in value_space:
                 return value
             else:
-                quoted = [ '\'{}\''.format(x.encode('utf-8')) for x in value_space ]
-                message = '\'{}\' is not one of [ {} ].'.format(value, ', '.join(quoted))
+                quoted = [f'\'{x.encode("utf-8")}\'' for x in value_space]
+                message = f'\'{value}\' is not one of [ {", ".join(quoted)} ].'
                 raise df.Invalid(_(message))
         raise df.Invalid('\'value_space\' must be a list.')
 
@@ -160,5 +160,5 @@ class Validator(object):
         if name in group_names:
             return name
         else:
-            raise df.Invalid(_('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(name, context['user'])))
+            raise df.Invalid(_(f'Group \'{name}\' does not exist or cannot be edited by user \'{context["user"]}\'.'))
 

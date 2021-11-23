@@ -38,7 +38,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         url_parts = site_url.split(":")
         if len(url_parts) > 2:
             port = url_parts[2]
-        config['schema_ref_url'] = "http://localhost:{}{}".format(port, "/terms")
+        config['schema_ref_url'] = f"http://localhost:{port}/terms"
 
         path = os.path.abspath(__file__)
         dir_path = os.path.dirname(path)
@@ -319,7 +319,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             try:
                 validator.is_group_name_valid(group_name, context)
             except df.Invalid as e:
-                _errors['groups'] = _errors.get('groups', []) + [ _('Group \'{}\' does not exist or cannot be edited by user \'{}\'.'.format(group_name, context['user'])) ]
+                _errors['groups'] = _errors.get('groups', []) + [_(f'Group \'{group_name}\' does not exist or cannot be edited by user \'{context["user"]}\'.')]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
         if action in [ 'package_create', 'package_update' ]:
