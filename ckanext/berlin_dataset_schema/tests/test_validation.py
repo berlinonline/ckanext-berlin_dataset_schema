@@ -56,18 +56,14 @@ class TestIsValidUrl:
         for url in urls:
             assert self.validator.is_valid_url(url) == url
 
-    def test_invalid_urls_are_rejected(self):
-        urls = [
-            "noscheme" ,
-            " https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" , # trailing whitespace
-            "https://www.berlin.de/ sen/ wirtschaft/" , # internal whitespace
-            "foonz://www.berlin.de" , # unknown/invalid scheme
-            "https://www.berlin.de/sen/wirtschaft/  " , # trailing whitespace
-        ]
-        for url in urls:
-            yield self.check_valid_url, url
-
-    def check_valid_url(self, url):
+    @pytest.mark.parametrize("url", [
+        "noscheme",
+        " https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/",  # trailing whitespace
+        "https://www.berlin.de/ sen/ wirtschaft/",  # internal whitespace
+        "foonz://www.berlin.de",  # unknown/invalid scheme
+        "https://www.berlin.de/sen/wirtschaft/  ",  # trailing whitespace
+    ])
+    def test_reject_invalid_url(self, url):
         with pytest.raises(df.Invalid):
             self.validator.is_valid_url(url)
 
