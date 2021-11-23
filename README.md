@@ -1,12 +1,12 @@
 # ckanext-berlin_dataset_schema
 
-[![Tests](https://github.com/ckan/ckanext-berlin_dataset_schema/workflows/Tests/badge.svg)](https://github.com/ckan/ckanext-berlin_dataset_schema/actions)
+[![Tests](https://github.com/berlinonline/ckanext-berlin_dataset_schema/workflows/Tests/badge.svg)](https://github.com/berlinonline/ckanext-berlin_dataset_schema/actions)
 
-Implementation of IDatasetForm to provide a custom dataset schema for the `Berlin Open Data Portal <https://daten.berlin.de>`_. 
+Implementation of IDatasetForm to provide a custom dataset schema for the [Berlin Open Data Portal](https://daten.berlin.de). 
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.4 (which require Python 3).
+This plugin has been tested with CKAN 2.9.4 (which requires Python 3).
 
 ## License
 
