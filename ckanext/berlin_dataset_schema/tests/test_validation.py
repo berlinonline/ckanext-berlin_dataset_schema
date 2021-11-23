@@ -108,7 +108,7 @@ class TestIsLicenseId:
         self.validator.is_license_id('unlicensed')
 
     def test_is_license_id_gives_correct_answer(self):
-        license_ids = [ 'cc-by', 'cc-zero', 'cc-by-sa', 'cc-nc', 'dl-de-2-0', 'geonutzv', 'geonutz-be-2013-10-01', 'odc-odbl', 'other-closed' ]
+        license_ids = ["cc-by", "cc-by/4.0", "cc-zero", "cc-by-sa", "cc-nc", "dl-de-zero-2.0", "dl-de-by-2.0", "odc-odbl", "other-closed" ]
         for _id in license_ids:
             actual = self.validator.is_license_id(_id)
             expected = _id
