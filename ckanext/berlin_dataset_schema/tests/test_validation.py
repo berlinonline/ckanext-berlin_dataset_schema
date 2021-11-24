@@ -249,7 +249,7 @@ class TestIsGroupNameValid:
             u'erholung',
             u'geo',
             u'verkehr',
-            u'verwaltung'
+            u'verwaltung',
             u'wahl',
         ]
         for group_name in group_names:
