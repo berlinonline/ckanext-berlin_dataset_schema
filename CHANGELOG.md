@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.2.0](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.0)
+
+_(2021-11-24)_
+
 - Convert from Python 2 to Python 3.
 - Switch testing framework from Nose to Pytest.
 - Switch CI from travis to gh-actions.
@@ -10,7 +14,6 @@
 ## [0.1.3](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.1.3)
 
 _(2019-08-09)_
-
 
 - Bump schema to [version 2.2](https://github.com/berlinonline/berlin_od_schema/tree/2.2).
 - The last version to work with Python 2 / CKAN versions < 2.9.
