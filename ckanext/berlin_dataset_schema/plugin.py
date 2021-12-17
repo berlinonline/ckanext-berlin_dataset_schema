@@ -312,14 +312,17 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             groups = data_dict.get('groups', [])
             data_dict['groups'] = groups + [ { 'name': category } ]
 
-        # Check if the group names exist:
-        for group in data_dict.get('groups', []):
-            group_name = group.get('name', None)
-            validator = berlin_validators.Validator()
-            try:
-                validator.is_group_name_valid(group_name, context)
-            except df.Invalid as e:
-                _errors['groups'] = _errors.get('groups', []) + [_(f'Group \'{group_name}\' does not exist or cannot be edited by user \'{context["user"]}\'.')]
+        # The following checks if a user is allowed to edit/create datasets in the given group.
+        # TODO: Shouldn't this really be checked elsewhere (authorization)? Validation isn't really
+        # the place for it.
+        if action != "package_show":
+            for group in data_dict.get('groups', []):
+                group_name = group.get('name', None)
+                validator = berlin_validators.Validator()
+                try:
+                    validator.is_group_name_valid(group_name, context)
+                except df.Invalid as e:
+                    _errors['groups'] = _errors.get('groups', []) + [_(f'Group \'{group_name}\' does not exist or cannot be edited by user \'{context["user"]}\'.')]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
         if action in [ 'package_create', 'package_update' ]:
