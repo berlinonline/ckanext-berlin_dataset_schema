@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.2.2](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.2)
+
+_(2022-02-22)_
+
+- Run tests on pushes, but not on pushing tags.
+
 ## [0.2.1](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.1)
 
 _(2022-02-22)_
