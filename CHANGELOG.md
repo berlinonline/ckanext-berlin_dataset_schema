@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.2.3](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.3)
+
+_(2022-02-22)_
+
+- Fix codecov configuration and add badge.
+
 ## [0.2.2](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.2)
 
 _(2022-02-22)_
