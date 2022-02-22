@@ -1,7 +1,7 @@
 name: Tests
 on:
   push:
-    tags-ignore:
+    branches:
       - '**'
 jobs:
   # lint:
