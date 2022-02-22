@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.2.1](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.1)
+
+_(2022-02-22)_
+
 - Fix an error in package validation (don't check group membership for `package_show`).
 
 ## [0.2.0](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.0)
