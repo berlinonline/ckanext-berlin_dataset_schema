@@ -48,7 +48,7 @@ setup(
 
 
     # What does your project relate to?
-    keywords='''CKAN IDatasetForm dataset schema''',
+    keywords='''CKAN IDatasetForm IValidators dataset schema''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
