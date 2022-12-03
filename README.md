@@ -7,7 +7,7 @@ Implementation of [IDatasetForm](http://docs.ckan.org/en/latest/extensions/plugi
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.5 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.7 (which requires Python 3).
 
 ## License
 
