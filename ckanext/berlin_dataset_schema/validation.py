@@ -66,6 +66,12 @@ class Validator(object):
         enum = self.json_schema.enum_for_attribute('temporal_granularity')
         return enum
 
+    def sample_records(self):
+        '''
+        Return the currently valid values of the 'sample_record' metadatum.
+        '''
+        enum = self.json_schema.enum_for_attribute('sample_record')
+        return enum
 
     def isodate_notime(self, value):
         """
@@ -144,6 +150,14 @@ class Validator(object):
         values for temporal granularity.
         """
         value_space = self.temporal_granularities()
+        return self.is_in_enum(value, value_space)
+
+    def is_sample_record(self, value):
+        '''
+        Validator function to check that a value is one of the currently available
+        values for the metadatum 'sample_record'.
+        '''
+        value_space = self.sample_records()
         return self.is_in_enum(value, value_space)
 
     def is_group_name_valid(self, name, context):

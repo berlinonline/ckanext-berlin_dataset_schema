@@ -213,6 +213,40 @@ class TestIsTemporalGranularity:
 
 # -------------------
 
+class TestIsSampleRecord:
+    '''
+    Tests for validation.is_sample_record() validator.
+    '''
+
+    def setup(self):
+        self.validator = Validator()
+
+    @pytest.mark.parametrize('value', [
+        'whatever',
+        42,
+        'https://musterdatenkatalog.de/def/musterdatensatz/bau/baugenehmigungen',
+        'baum/baugenehmigungen',
+        '',
+        None
+    ])
+    def test_is_sample_record_raises_invalid_error_for_bad_value(self, value):
+        with pytest.raises(df.Invalid):
+            self.validator.is_sample_record(value)
+
+    @pytest.mark.parametrize('value', [
+        'bau/baugenehmigungen',
+        'bevoelkerung/vornamen',
+        'gruenflaechen/ausgleichsflaechen',
+        'wahlen/kandidatenlisten',
+        'wetter/messstellen',
+        'zivilUndKatastrophenschutz/sirenen'
+    ])
+    def test_is_sample_record_succeeds_for_correct_value(self, value):
+        answer = self.validator.is_sample_record(value)
+        assert answer == value
+
+# -------------------
+
 class TestIsInEnum:
     """
     Tests for validation.is_in_enum() helper (mostly covered by other test classes).
