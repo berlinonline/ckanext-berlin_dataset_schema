@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.2.4](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.4)
+
+_(2023-01-22)_
+
+- Fix `MANIFEST.in`.
+
 ## [0.2.3](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.3)
 
 _(2022-02-22)_
