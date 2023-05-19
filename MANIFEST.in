@@ -2,3 +2,4 @@ include README.md
 include LICENSE
 include requirements.txt
 recursive-include ckanext/berlin_dataset_schema/public/schema *
+include ckanext/berlin_dataset_schema/VERSION
