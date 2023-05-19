@@ -9,13 +9,16 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+with open(path.join(here, 'ckanext', 'berlin_dataset_schema', 'VERSION')) as version_file:
+    version = version_file.read().strip()
+
 setup(
     name='''ckanext-berlin_dataset_schema''',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='0.2.1',
+    version=version,
 
     description='''Custom dataset schema for daten.berlin.de''',
     long_description=long_description,

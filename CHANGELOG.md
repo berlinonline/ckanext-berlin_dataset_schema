@@ -2,6 +2,9 @@
 
 ## Development
 
+- Add `schema` to list of public pages to allow access for anonymous users.
+- Define extension's version string in [VERSION](VERSION), make available as `ckanext.dcatde_berlin.__version__` and in [setup.py](setup.py).
+
 ## [0.2.3](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.3)
 
 _(2022-02-22)_
