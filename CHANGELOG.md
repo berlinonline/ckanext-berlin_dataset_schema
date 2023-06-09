@@ -2,6 +2,8 @@
 
 ## Development
 
+- Implement the [IFacets](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IFacets) interface to allow faceted search using the custom dataset schema.
+
 ## [0.2.5](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.2.5)
 
 _(2023-05-19)_

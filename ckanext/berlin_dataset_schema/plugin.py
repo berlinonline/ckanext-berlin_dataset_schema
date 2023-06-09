@@ -3,10 +3,11 @@
 Module for the CKAN extension defining the dataset schema for daten.berlin.de.
 """
 
+from collections import OrderedDict
 import logging
 import os
 
-from ckan.common import _
+from ckan.common import _, c
 import ckan.lib.navl.dictization_functions as df
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -22,6 +23,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.IValidators)
+    plugins.implements(plugins.IFacets, inherit=True)
 
     # -------------------------------------------------------------------
     # Implementation IConfigurer
@@ -361,3 +363,25 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             "is_temporal_granularity": validator.is_temporal_granularity ,
             "is_group_name_valid": validator.is_group_name_valid
         }
+
+    # -------------------------------------------------------------------
+    # Implementation IFacets
+    # -------------------------------------------------------------------
+
+    def dataset_facets(self, facets_dict, package_type):
+        """ Implementation of https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IFacets.dataset_facets"""
+        if package_type == 'dataset':
+            facets_dict = OrderedDict()
+            facets_dict['groups'] = toolkit._(u'Kategorie')
+            facets_dict['author_string'] = toolkit._(u'Quelle')
+            facets_dict['license_id'] = toolkit._(u'Lizenz')
+            facets_dict['geographical_coverage'] = toolkit._(u'Geografische Abdeckung')
+            facets_dict['geographical_granularity'] = toolkit._(u'Geografische Granularität')
+            facets_dict['temporal_granularity'] = toolkit._(u'Zeitliche Granularität')
+            facets_dict['res_format'] = toolkit._(u'Format')
+            facets_dict['tags'] = toolkit._(u'Tags')
+            facets_dict['berlin_type'] = toolkit._(u'Typ')
+            if c.userobj:
+                if c.userobj.sysadmin:
+                    facets_dict['organization'] = toolkit._(u'Organisation')
+        return facets_dict

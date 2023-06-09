@@ -7,6 +7,7 @@ import pytest
 
 import ckan.logic as logic
 import ckan.plugins
+from ckan.plugins.toolkit import url_for
 import ckan.lib.plugins as lib_plugins
 import ckan.lib.navl.dictization_functions as df
 import ckan.plugins.toolkit as toolkit
@@ -300,3 +301,37 @@ class TestSchemaGeneration(object):
         _errors = validated_data[1]
 
         assert 'groups' in _errors
+
+@pytest.mark.ckan_config('ckan.plugins', f"{PLUGIN_NAME}")
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
+class TestFacets(object):
+
+    def test_facets_visible(self, app):
+        '''Sanity test to see if custom facets are exposed in search page.'''
+        dataset_index_url = url_for("dataset.search")
+        response = app.get(
+            url=dataset_index_url,
+            status=200
+        )
+        # TODO: We should use a more robust test, which really looks at the right
+        # place in the markup. Otherwise we might get false positives.
+        assert "Geografische Abdeckung" in response.body
+        assert "Zeitliche Granularität" in response.body
+        # 'Organisation' should only be visible to admins
+        assert "Organisation" not in response.body
+
+    def test_facets_visible_admin(self, app):
+        '''Sanity test to see if special custom facets are exposed to admins in the search page.'''
+        admin_user = factories.Sysadmin(name='theadmin')
+        dataset_index_url = url_for("dataset.search")
+        response = app.get(
+            url=dataset_index_url,
+            extra_environ={'Authorization': admin_user['apikey']},
+            status=200
+        )
+        # TODO: We should use a more robust test, which really looks at the right
+        # place in the markup. Otherwise we might get false positives.
+        assert "Geografische Abdeckung" in response.body
+        assert "Zeitliche Granularität" in response.body
+        # 'Organisation' should only be visible to admins
+        assert "Organisation" in response.body
