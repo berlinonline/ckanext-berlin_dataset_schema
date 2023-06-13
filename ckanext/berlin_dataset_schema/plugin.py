@@ -39,6 +39,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         path = os.path.abspath(__file__)
         dir_path = os.path.dirname(path)
         schema_path = os.path.join(dir_path, "public", "schema", "berlin_od_schema.json")
+        licenses_path = os.path.join(dir_path, "public", "licenses", "berlin-od-portal.json")
+        config['licenses_group_url'] = f"file:/{licenses_path}"
 
         self.json_schema = Schema()
         self.json_schema.load_schema(schema_path)
@@ -46,6 +48,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         public_pages = config.get('berlin.public_pages', "")
         page_list = public_pages.split()
         page_list.append('schema')
+        page_list.append('licenses')
         config['berlin.public_pages'] = ' '.join(page_list)
 
     # -------------------------------------------------------------------

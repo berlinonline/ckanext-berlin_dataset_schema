@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.3.2](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.2)
+
+_(2023-06-14)_
+
+- Add custom licenses list (previously in `ckanext-berlin`).
+
 ## [0.3.1](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.1)
 
 _(2023-06-13)_
