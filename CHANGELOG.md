@@ -4,9 +4,9 @@
 
 ## [0.3.1](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.1)
 
-_(2023-06-12)_
+_(2023-06-13)_
 
-- Add add custom SOLR schema, including new field `author_string` of type `string` (rather than `text_gen`), which is needed to include the `author` metadatum in facetted browsing.
+- Add add custom SOLR schema, including new field `author_string` of type `string` (rather than `text_general`), which is needed to include the `author` metadatum in facetted browsing.
 
 ## [0.3.0](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.0)
 
