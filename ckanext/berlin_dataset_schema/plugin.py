@@ -35,12 +35,6 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         """
         toolkit.add_public_directory(config, 'public')
         toolkit.add_resource('fanstatic', 'berlin_dataset_schema')
-        site_url = config.get('ckan.site_url', None)
-        port = 80
-        url_parts = site_url.split(":")
-        if len(url_parts) > 2:
-            port = url_parts[2]
-        config['schema_ref_url'] = f"http://localhost:{port}/terms"
 
         path = os.path.abspath(__file__)
         dir_path = os.path.dirname(path)
