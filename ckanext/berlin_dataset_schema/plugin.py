@@ -40,7 +40,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         dir_path = os.path.dirname(path)
         schema_path = os.path.join(dir_path, "public", "schema", "berlin_od_schema.json")
         licenses_path = os.path.join(dir_path, "public", "licenses", "berlin-od-portal.json")
-        config['licenses_group_url'] = f"file:/{licenses_path}"
+        config['licenses_group_url'] = f"file://{licenses_path}"
 
         self.json_schema = Schema()
         self.json_schema.load_schema(schema_path)
