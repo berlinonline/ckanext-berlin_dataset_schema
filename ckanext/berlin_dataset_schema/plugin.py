@@ -6,6 +6,7 @@ Module for the CKAN extension defining the dataset schema for daten.berlin.de.
 from collections import OrderedDict
 import logging
 import os
+import pathlib
 
 from ckan.common import _, c
 import ckan.lib.navl.dictization_functions as df
@@ -14,7 +15,7 @@ import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
 from ckanext.berlin_dataset_schema.schema import Schema
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     """
@@ -40,7 +41,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         dir_path = os.path.dirname(path)
         schema_path = os.path.join(dir_path, "public", "schema", "berlin_od_schema.json")
         licenses_path = os.path.join(dir_path, "public", "licenses", "berlin-od-portal.json")
-        config['licenses_group_url'] = f"file:/{licenses_path}"
+        config['licenses_group_url'] = pathlib.Path(licenses_path).as_uri()
 
         self.json_schema = Schema()
         self.json_schema.load_schema(schema_path)
