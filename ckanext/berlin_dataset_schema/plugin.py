@@ -14,6 +14,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckanext.berlin_dataset_schema.validation as berlin_validators
 from ckanext.berlin_dataset_schema.schema import Schema
+from ckanext.berlin_dataset_schema import static_page_blueprint
 
 LOG = logging.getLogger(__name__)
 
@@ -25,6 +26,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.IValidators)
     plugins.implements(plugins.IFacets, inherit=True)
+    plugins.implements(plugins.IBlueprint)
 
     # -------------------------------------------------------------------
     # Implementation IConfigurer
@@ -35,6 +37,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         Implementation of IConfigurer.update_config.
         """
         toolkit.add_public_directory(config, 'public')
+        toolkit.add_template_directory(config, 'templates')
         toolkit.add_resource('fanstatic', 'berlin_dataset_schema')
 
         path = os.path.abspath(__file__)
@@ -383,3 +386,16 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 if c.userobj.sysadmin:
                     facets_dict['organization'] = toolkit._(u'Organisation')
         return facets_dict
+
+
+    # -------------------------------------------------------------------
+    # IBlueprint
+    # -------------------------------------------------------------------
+
+    def get_blueprint(self):
+        """
+        Implementation of
+        https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IBlueprint.get_blueprint
+        """
+
+        return static_page_blueprint.static_page_blueprint
