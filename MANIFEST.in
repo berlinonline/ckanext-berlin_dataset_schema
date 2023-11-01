@@ -3,4 +3,6 @@ include LICENSE
 include requirements.txt
 recursive-include ckanext/berlin_dataset_schema/public/schema *
 recursive-include ckanext/berlin_dataset_schema/public/licenses *
+recursive-include ckanext/berlin_dataset_schema/templates *
+recursive-include ckanext/berlin_dataset_schema *.html *.json *.js *.css
 include ckanext/berlin_dataset_schema/VERSION
