@@ -68,6 +68,18 @@ class Schema(plugins.SingletonPlugin):
             return None
         raise SchemaError("JSON Schema does not contain 'properties' attribute.")
 
+    def attribute_definition(self, attribute: str) -> dict:
+        """
+        Helper function to return the definition of a given dataset `attribute`
+        as a dict, or None if the attribute doesn't exist.
+        """
+        properties = self.schema().get('properties')
+        if properties:
+            if attribute in properties:
+                return properties[attribute]
+            return None
+        raise SchemaError("JSON Schema does not contain 'properties' attribute.")
+
     def enum_for_attribute(self, attribute):
         """
         Helper function that returns the enum definition for a given attribute.
