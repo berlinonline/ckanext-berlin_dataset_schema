@@ -13,6 +13,7 @@ import ckan.lib.navl.dictization_functions as df
 import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
+import ckan.model as model
 
 PLUGIN_NAME = 'berlin_dataset_schema'
 
@@ -335,3 +336,33 @@ class TestFacets(object):
         assert "Zeitliche Granularität" in response.body
         # 'Organisation' should only be visible to admins
         assert "Organisation" in response.body
+
+
+@pytest.fixture
+def user():
+    '''Fixture to create a logged-in user.'''
+    user = model.User(name="vera_musterer", password=u"testtest")
+    model.Session.add(user)
+    model.Session.commit()
+    return user
+
+@pytest.mark.ckan_config('ckan.plugins', f"{PLUGIN_NAME}")
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
+class TestPlugin(object):
+
+    def test_schema_route_logged_in(self, app, user):
+        '''Test rendering of schema for a logged-in user.'''
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url="/schema",
+            status=200
+        )
+        assert "Schema" in response.body
+
+    def test_schema_route_non_logged_in(self, app):
+        '''Test rendering of schema for a non logged-in user.'''
+        response = app.get(
+            url="/schema",
+            status=200
+        )
+        assert "Schema" in response.body
