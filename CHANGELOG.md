@@ -3,6 +3,7 @@
 ## Development
 
 - Add some user help texts to the JSON schema as `user_help_text` attributes.
+- Add static page blueprint to serve `/schema/index.html` under `/schema`.
 
 ## [0.3.2](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.2)
 
