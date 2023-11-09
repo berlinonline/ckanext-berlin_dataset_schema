@@ -60,6 +60,13 @@ class TestCompleteSchema(object):
     def test_enum_for_attribute_returns_none_for_unenumerated(self):
         assert schema.Schema().enum_for_attribute('author') is None
 
+    def test_attribute_definition_for_existing_attribute_is_dict(self):
+        definition = schema.Schema().attribute_definition('geographical_coverage')
+        assert isinstance(definition, dict)
+    
+    def test_attribute_definition_for_missing_attribute_is_none(self):
+        assert schema.Schema().attribute_definition('foo') is None
+    
     @raises(schema.SchemaError)
     def test_enum_for_attribute_raises_error_for_undefined_attribute(self):
         schema.Schema().enum_for_attribute('foo_bar')
@@ -100,6 +107,9 @@ class TestEmptySchema(object):
     def test_empty_schema_raises_schema_error_on_required(self):
         schema.Schema().required('author')
 
+    @raises(schema.SchemaError)
+    def test_empty_schema_raises_schema_error_on_attribute_definition(self):
+        schema.Schema().attribute_definition('author')
 
 class TestNoSchemaLoaded(object):
 
