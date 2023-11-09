@@ -3,11 +3,16 @@
 [![Tests](https://github.com/berlinonline/ckanext-berlin_dataset_schema/workflows/Tests/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-berlin_dataset_schema/actions)
 [![Code Coverage](http://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema/coverage.svg?branch=master)](http://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema?branch=master)
 
-Implementation of [IDatasetForm](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm), [IValidators](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators) and [IFacets](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IFacets) to provide a custom dataset schema for the [Berlin Open Data Portal](https://daten.berlin.de).
+Implementation of 
+[IDatasetForm](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm),
+[IValidators](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators),
+[IFacets](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IFacets) and
+[IBlueprint](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IBlueprint)
+to provide a custom dataset schema for the [Berlin Open Data Portal](https://daten.berlin.de).
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.8 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.9 (which requires Python 3).
 
 ## License
 
