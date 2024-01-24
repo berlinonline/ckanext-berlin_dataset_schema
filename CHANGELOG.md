@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.3.4](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.4)
+
+_(2023-01-24)_
+
+- Add missing `geographical_coverage` values `Köpenick`, `Kreuzberg` and `Treptow`.
+
 ## [0.3.3](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.3)
 
 _(2023-11-09)_
