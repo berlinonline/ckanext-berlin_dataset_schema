@@ -12,7 +12,7 @@ to provide a custom dataset schema for the [Berlin Open Data Portal](https://dat
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.9 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.10 (which requires Python 3).
 
 ## License
 
