@@ -10,6 +10,7 @@ _(2024-03-21)_
 This should be used instead of adding the image directly to the markdown-blob with the dataset description.
 Using `preview_image` field is the responsibility of the theme extensions and harvesters (e.g. [ckanext-berlintheme](https://github.com/berlinonline/ckanext-berlintheme), [ckanext-datasetsnippets](https://github.com/berlinonline/ckanext-datasetsnippets), [ckanext-fisbroker](https://github.com/berlinonline/ckanext-fisbroker)).
 - Update [JSON schema](https://datenregister.berlin.de/schema/berlin_od_schema.json) and [schema website](https://datenregister.berlin.de/schema/), now at version 2.3.1.
+- Change Solr image reference in github CI ([test.yml](.github/workflows/test.yml)) to the new naming scheme according to https://github.com/ckan/ckan-solr.
 
 ## [0.3.4](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.4)
 
