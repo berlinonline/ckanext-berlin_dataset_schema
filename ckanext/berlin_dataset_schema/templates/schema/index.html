@@ -1,400 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Berlin Metadata Schema</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Berlin Metadata Schema</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Bootstrap -->
-  <link href="../../schema/css/bootstrap.min.css" rel="stylesheet">
-
-  <link href="../../schema/css/doc.css" rel="stylesheet">
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
+    <link href="css/doc.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-</head>
-
-<body>
-  <div class='content'>
-    <h1>Berlin Open Data Schema</h1>
-    <p class='lead'>Schema to describe and validate dataset descriptions for the <a
-        href='https://daten.berlin.de'>Berlin Open Data Portal</a>.</p>
-    <dl>
-      <dt>Hinweise</dt>
-      <dd>Die Dokumentation bezieht sich auf die <a href='https://docs.ckan.org/en/2.9/api/'>CKAN API v3</a>.</dd>
-      <dt>Schema Source</dt>
-      <dd><a href='/schema/berlin_od_schema.json'>berlin_od_schema.json</a></dd>
-      <dt>Project Source</dt>
-      <dd><a href='https://github.com/knudmoeller/berlin_od_schema'>https://github.com/knudmoeller/berlin_od_schema</a>
-      </dd>
-      <dt>JSON Schema Version</dt>
-      <dd><a href='http://json-schema.org/draft-04/schema#'>http://json-schema.org/draft-04/schema#</a></dd>
-    </dl>
-    <p><span style='color: red'>*</span> bezeichnet Pflichtfelder.</p>
-    <div class='container-fluid doc-schema_content'>
-
-      <div class='row doc-properties'>
-        <div class='col-md-12'>
-
-          <div class="row doc-header">
-            <div class="col-md-1 doc-label">
-              Title
-            </div>
-            <div class="col-md-1 doc-label">
-              Type
-            </div>
-            <div class="col-md-2 doc-label">
-              Description
-            </div>
-            <div class='col-md-8 doc-label'>
-              Definition
-            </div>
-          </div>
-
-          <div class='row doc-property doc-odd doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='title' href='#title'>title</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Titel: Der Titel beschreibt den Datensatz, das Dokument oder die App
-              prägnant und wird z. B. in Suchergebnissen und Listen angezeigt.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'title' -->
-          <div class='row doc-property doc-even doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='name' href='#name'>name</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Name: Ein für Menschen lesbarer Bezeichner des Datensatzes, des
-              Dokuments oder der Apps, der für eine Identifizierung genutzt werden kann (einfache ASCII-Präsentation
-              des Titels, auch für die Pretty-Link-URL, Linked Data URIs)</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>pattern</dt>
-                  <dd>
-                    <code>^[a-z0-9_-]{2,}$</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'name' -->
-          <div class='row doc-property doc-odd doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='berlin_type' href='#berlin_type'>berlin_type</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Typ: Zeigt an, ob ein Datensatz, ein Dokument, eine App beschrieben
-              wird. Entscheidet darüber, in welchem Bereich diese Metadaten angezeigt werden.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>enum</dt>
-                  <dd>
-                    <code>datensatz</code>, <code>dokument</code>, <code>app</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'berlin_type' -->
-          <div class='row doc-property doc-even doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='berlin_source' href='#berlin_source'>berlin_source</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Intern genutztes Merkmal, das die Eingabeart des Datensatzes
-              unterscheidet. Werte können etwa 'api-xyz' (über die CKAN API ins Datenregister gepusht), 'harvest-xyz'
-              (über einen Harvester vom Datenregister gepullt), 'simplesearch' (über das Imperia CMS erzeugt) oder
-              'webform' (direkt im Datenregister über das Webformular erzeugt) sein.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'berlin_source' -->
-          <div class='row doc-property doc-odd doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='author' href='#author'>author</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Veröffentlichende Stelle: Die Behörde, von der die Daten stammen.
-              Bei Apps der App-Hersteller.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'author' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='author_email' href='#author_email'>author_email</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Veröffentlichende Stelle Email: Email-Adresse oder Kontaktformular
-              der Veröffentlichenden Stelle.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>uri</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'author_email' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='maintainer' href='#maintainer'>maintainer</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Datenverantwortliche Stelle: Dieser Ansprechpartner kann bei Fragen
-              und Anmerkungen zu den Daten kontaktiert werden.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'maintainer' -->
-          <div class='row doc-property doc-even doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='maintainer_email'
-                href='#maintainer_email'>maintainer_email</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Datenverantwortliche Stelle Email: Email-Adresse oder
-              Kontaktformular der Datenverantwortlichen Stelle.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>uri</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'maintainer_email' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='url' href='#url'>url</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Website: Die ursprüngliche Webadresse des Datensatzes, Dokuments
-              oder der App, um zu weiteren Informationen über den Datensatz, das Dokument oder die App zu gelangen.
-              Wird auf der Detailseite als Link angezeigt.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>uri</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'url' -->
-          <div class='row doc-property doc-even doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='notes' href='#notes'>notes</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Beschreibung: Beschreibung und weitere Informationen zum Datensatz,
-              zum Dokument oder zur App, wird auf der Detailseite dargestellt und kann mehrere Absätze umfassen.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'notes' -->
-          <div class='row doc-property doc-odd doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='license_id' href='#license_id'>license_id</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a
-                href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a>
-            </div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>enum</dt>
-                  <dd>
-                    <code>cc-by</code>, <code>cc-zero</code>, <code>cc-by-sa</code>, <code>cc-nc</code>,
-                    <code>dl-de-zero-2.0</code>, <code>dl-de-by-2.0</code>, <code>odc-odbl</code>,
-                    <code>other-closed</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'license_id' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='attribution_text'
-                href='#attribution_text'>attribution_text</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Der exakte Text, der im Rahmen der Namensnennung anzugeben ist.
-            </div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'attribution_text' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='username' href='#username'>username</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Veröffentlichende Person: Person, die lediglich für Veröffentlichung
-              zuständig ist.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-              </div>
-            </div>
-          </div> <!-- property 'username' -->
-          <div class='row doc-property doc-even doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='date_released' href='#date_released'>date_released</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Veröffentlichungsdatum: Wann wurden dieser Datensatz erstmalig
-              angelegt/erzeugt? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem der Datensatz in das
-              Datenregister eingepflegt wurde, sondern kann auch davor liegen.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>date-time</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'date_released' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='date_updated' href='#date_updated'>date_updated</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Änderungsgsdatum: Wann wurden dieser Datensatz geändert? Wichtig:
-              dies beschreibt nicht zwingend den Zeitpunkt, an dem die geänderten Daten in das Datenregister eingepflegt
-              wurde, sondern kann auch davor liegen.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>date-time</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'date_updated' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='geographical_granularity'
-                href='#geographical_granularity'>geographical_granularity</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Räumliche Auflösung: Die geographische Granularität des Datensatzes,
-              eines Dokuments, einer App. Wird später zum Filtern verwendet.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>enum</dt>
-                  <dd>
-                    <code>Keine</code>, <code>Deutschland</code>, <code>Berlin</code>, <code>Bezirk</code>,
-                    <code>Ortsteil</code>, <code>Prognoseraum</code>, <code>Bezirksregion</code>,
-                    <code>Planungsraum</code>, <code>Block</code>, <code>Einschulbereich</code>,
-                    <code>Kontaktbereich</code>, <code>PLZ</code>, <code>Stimmbezirk</code>,
-                    <code>Quartiersmanagement</code>, <code>Wohnanlage</code>, <code>Wahlkreis</code>,
-                    <code>Hausnummer</code>, <code>GPS-Koordinaten</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'geographical_granularity' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='geographical_coverage'
-                href='#geographical_coverage'>geographical_coverage</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Räumliche Abdeckung: der geographische Bereich, der von dem
-              Datensatz, dem Dokument oder der App abgedeckt wird. Wird zum Filtern verwendet.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>enum</dt>
-                  <dd>
-                    <code>Keine</code>, <code>Adlershof</code>, <code>Alt-Hohenschönhausen</code>,
-                    <code>Alt-Treptow</code>, <code>Altglienicke</code>, <code>Baumschulenweg</code>,
-                    <code>Berlin</code>, <code>Biesdorf</code>, <code>Blankenburg</code>, <code>Blankenfelde</code>,
-                    <code>Bohnsdorf</code>, <code>Britz</code>, <code>Buch</code>, <code>Buckow</code>,
-                    <code>Charlottenburg</code>, <code>Charlottenburg-Nord</code>,
-                    <code>Charlottenburg-Wilmersdorf</code>, <code>Dahlem</code>, <code>Deutschland</code>,
-                    <code>Friedenau</code>, <code>Friedrichsfelde</code>, <code>Friedrichshagen</code>,
-                    <code>Friedrichshain</code>, <code>Friedrichshain-Kreuzberg</code>, <code>Frohnau</code>,
-                    <code>Gatow</code>, <code>Gesundbrunnen</code>, <code>Gropiusstadt</code>, <code>Grunewald</code>,
-                    <code>Grünau</code>, <code>Hakenfelde</code>, <code>Halensee</code>, <code>Hansaviertel</code>,
-                    <code>Haselhorst</code>, <code>Heiligensee</code>, <code>Heinersdorf</code>,
-                    <code>Hellersdorf</code>, <code>Hermsdorf</code>, <code>Hohenschönhausen</code>,
-                    <code>Johannisthal</code>, <code>Karlshorst</code>, <code>Karow</code>, <code>Kaulsdorf</code>,
-                    <code>Kladow</code>, <code>Köpenick</code>, <code>Kreuzberg</code>, <code>Lichtenberg</code>, <code>Lichtenrade</code>, <code>Lichterfelde</code>,
-                    <code>Lübars</code>, <code>Mahlsdorf</code>, <code>Malchow</code>, <code>Mariendorf</code>,
-                    <code>Marienfelde</code>, <code>Marzahn</code>, <code>Marzahn-Hellersdorf</code>,
-                    <code>Mitte</code>, <code>Moabit</code>, <code>Märkisches Viertel</code>, <code>Müggelheim</code>,
-                    <code>Neu-Hohenschönhausen</code>, <code>Neukölln</code>, <code>Niederschöneweide</code>,
-                    <code>Niederschönhausen</code>, <code>Nikolassee</code>, <code>Oberschöneweide</code>,
-                    <code>Pankow </code>, <code>Pankow</code>, <code>Plänterwald</code>, <code>Prenzlauer Berg</code>,
-                    <code>Rahnsdorf</code>, <code>Reinickendorf</code>, <code>Schmöckwitz</code>,
-                    <code>Schöneberg</code>, <code>Siemensstadt</code>, <code>Spandau</code>, <code>Staaken</code>,
-                    <code>Stadtrandsiedlung Malchow</code>, <code>Steglitz</code>, <code>Steglitz-Zehlendorf</code>,
-                    <code>Tegel</code>, <code>Tempelhof</code>, <code>Tempelhof-Schöneberg</code>,
-                    <code>Tiergarten</code>, <code>Treptow</code>,<code>Treptow-Köpenick</code>, <code>Waidmannslust</code>,
-                    <code>Wannsee</code>, <code>Wartenberg</code>, <code>Wedding</code>, <code>Weißensee</code>,
-                    <code>Westend</code>, <code>Wilhelmsruh</code>, <code>Wilhelmstadt</code>, <code>Wilmersdorf</code>,
-                    <code>Wittenau</code>, <code>Zehlendorf</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'geographical_coverage' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='temporal_coverage_from'
-                href='#temporal_coverage_from'>temporal_coverage_from</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument
-              oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>date-time</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'temporal_coverage_from' -->
-          <div class='row doc-property doc-odd'>
-            <div class='col-md-1 doc-property_title'><a id='temporal_coverage_to'
-                href='#temporal_coverage_to'>temporal_coverage_to</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument
-              oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>format</dt>
-                  <dd>
-                    <code>date-time</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'temporal_coverage_to' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='temporal_granularity'
-                href='#temporal_granularity'>temporal_granularity</a></div>
-            <div class='col-md-1 doc-property_type'>string (1)</div>
-            <div class='col-md-2 doc-property_type'>Zeitliche Auflösung: Die zeitliche Auflösung der enthaltenen Daten,
-              des Dokuments oder der App. Wird später zum Filtern verwendet.</div>
-            <div class='col-md-8'>
-              <div class='col-md-8'>
-                <dl>
-                  <dt>enum</dt>
-                  <dd>
-                    <code>Keine</code>, <code>5 Jahre</code>, <code>Jahr</code>, <code>Quartal</code>,
-                    <code>Monat</code>, <code>Woche</code>, <code>Tag</code>, <code>Stunde</code>, <code>Minute</code>,
-                    <code>Sekunde</code>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div> <!-- property 'temporal_granularity' -->
-          <div class='row doc-property doc-odd doc-required'>
-            <div class='col-md-1 doc-property_title'><a id='groups' href='#groups'>groups</a></div>
-            <div class='col-md-1 doc-property_type'>object (+)</div>
-            <div class='col-md-2 doc-property_type'>Kategorien: Kategorien für die Datensätze und Dokumente. Die
-              Kategorien sind statisch und werden vom Portalbetreiber langfristig gepflegt.</div>
-            <div class='col-md-8'>
+  </head>
+  <body>
+    <div class='content'>
+<h1>Berlin Open Data Schema</h1>
+<p class='lead'>Schema to describe and validate dataset descriptions for the <a href='https://daten.berlin.de'>Berlin Open Data Portal</a>.</p>
+<dl>
+<dt>Hinweise</dt>
+<dd>Die Dokumentation bezieht sich auf die <a href='https://docs.ckan.org/en/2.9/api/index.html'>CKAN Action API</a>.</dd>
+<dt>Schema Source</dt>
+<dd><a href='berlin_od_schema.json'>berlin_od_schema.json</a></dd>
+<dt>Project Source</dt>
+<dd><a href='https://github.com/knudmoeller/berlin_od_schema'>https://github.com/knudmoeller/berlin_od_schema</a></dd>
+<dt>JSON Schema Version</dt>
+<dd><a href='http://json-schema.org/draft-04/schema#'>http://json-schema.org/draft-04/schema#</a></dd>
+</dl>
+<p><span style='color: red'>*</span> bezeichnet Pflichtfelder.</p>
+<div class='container-fluid doc-schema_content'>
 
               <div class='row doc-properties'>
                 <div class='col-md-12'>
-
+      
                   <div class="row doc-header">
                     <div class="col-md-1 doc-label">
                       Title
@@ -408,44 +51,290 @@
                     <div class='col-md-8 doc-label'>
                       Definition
                     </div>
-                  </div>
-
-                  <div class='row doc-property doc-odd doc-required doc-footer'>
-                    <div class='col-md-1 doc-property_title'><a id='groups_name' href='#groups_name'>name</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'></div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                        <dl>
-                          <dt>enum</dt>
-                          <dd>
-                            <code>arbeit</code>, <code>bildung</code>, <code>demographie</code>, <code>erholung</code>,
-                            <code>gesundheit</code>, <code>jugend</code>, <code>justiz</code>, <code>kultur</code>,
-                            <code>oeffentlich</code>, <code>sicherheit</code>, <code>sozial</code>,
-                            <code>tourismus</code>, <code>transport</code>, <code>umwelt</code>,
-                            <code>verbraucher</code>, <code>verentsorgung</code>, <code>verkehr</code>,
-                            <code>verwaltung</code>, <code>wahl</code>, <code>wirtschaft</code>, <code>wohnen</code>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div> <!-- property 'name' -->
-
-                </div> <!-- end col (doc-properties) -->
-              </div> <!-- end row (doc-properties) -->
-
-            </div>
-          </div> <!-- property 'groups' -->
-          <div class='row doc-property doc-even'>
-            <div class='col-md-1 doc-property_title'><a id='tags' href='#tags'>tags</a></div>
-            <div class='col-md-1 doc-property_type'>object (+)</div>
-            <div class='col-md-2 doc-property_type'>Schlagwörter: Freie Schlüsselwörter des Datensatzes, des Dokuments
-              oder der App</div>
-            <div class='col-md-8'>
+                  </div>    
+            
+<div class='row doc-property doc-odd doc-required'>
+<div class='col-md-1 doc-property_title'><a id='title' href='#title'>title</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Titel: Der Titel beschreibt den Datensatz, das Dokument oder die App prägnant und wird z. B. in Suchergebnissen und Listen angezeigt.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'title' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='name' href='#name'>name</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Name: Ein für Menschen lesbarer Bezeichner des Datensatzes, des Dokuments oder der Apps, der für eine Identifizierung genutzt werden kann (einfache ASCII-Präsentation des Titels, auch für die Pretty-Link-URL, Linked Data URIs)</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>pattern</dt>
+<dd>
+<code>^[a-z0-9_-]{2,}$</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'name' -->
+<div class='row doc-property doc-odd doc-required'>
+<div class='col-md-1 doc-property_title'><a id='berlin_type' href='#berlin_type'>berlin_type</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Typ: Zeigt an, ob ein Datensatz, ein Dokument, eine App beschrieben wird. Entscheidet darüber, in welchem Bereich diese Metadaten angezeigt werden.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>datensatz</code>, <code>dokument</code>, <code>app</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'berlin_type' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='berlin_source' href='#berlin_source'>berlin_source</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Intern genutztes Merkmal, das die Eingabeart des Datensatzes unterscheidet. Werte können etwa 'api-xyz' (über die CKAN API ins Datenregister gepusht), 'harvest-xyz' (über einen Harvester vom Datenregister gepullt), 'simplesearch' (über das Imperia CMS erzeugt) oder 'webform' (direkt im Datenregister über das Webformular erzeugt) sein.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'berlin_source' -->
+<div class='row doc-property doc-odd doc-required'>
+<div class='col-md-1 doc-property_title'><a id='author' href='#author'>author</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Veröffentlichende Stelle: Die Behörde, von der die Daten stammen. Bei Apps der App-Hersteller.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'author' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='author_email' href='#author_email'>author_email</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Veröffentlichende Stelle Email: Email-Adresse oder Kontaktformular der Veröffentlichenden Stelle.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>uri</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'author_email' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='maintainer' href='#maintainer'>maintainer</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Datenverantwortliche Stelle: Dieser Ansprechpartner kann bei Fragen und Anmerkungen zu den Daten kontaktiert werden.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'maintainer' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='maintainer_email' href='#maintainer_email'>maintainer_email</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Datenverantwortliche Stelle Email: Email-Adresse oder Kontaktformular der Datenverantwortlichen Stelle.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>uri</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'maintainer_email' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='url' href='#url'>url</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Website: Die ursprüngliche Webadresse des Datensatzes, Dokuments oder der App, um zu weiteren Informationen über den Datensatz, das Dokument oder die App zu gelangen. Wird auf der Detailseite als Link angezeigt.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>uri</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'url' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='notes' href='#notes'>notes</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Beschreibung: Beschreibung und weitere Informationen zum Datensatz, zum Dokument oder zur App, wird auf der Detailseite dargestellt und kann mehrere Absätze umfassen.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'notes' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='preview_image' href='#preview_image'>preview_image</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Vorschaubild: Link zu einem Bild, das als Vorschau oder Illustration für den Datensatz dienen kann.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>uri</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'preview_image' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='license_id' href='#license_id'>license_id</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a></div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>cc-zero</code>, <code>cc-by</code>, <code>cc-by/4.0</code>, <code>cc-by-sa</code>, <code>cc-by-nc</code>, <code>dl-de-zero-2.0</code>, <code>dl-de-by-2.0</code>, <code>odc-odbl</code>, <code>other-closed</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'license_id' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='attribution_text' href='#attribution_text'>attribution_text</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Der exakte Text, der im Rahmen der Namensnennung anzugeben ist.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'attribution_text' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='username' href='#username'>username</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Veröffentlichende Person: Person, die lediglich für Veröffentlichung zuständig ist.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'username' -->
+<div class='row doc-property doc-odd doc-required'>
+<div class='col-md-1 doc-property_title'><a id='date_released' href='#date_released'>date_released</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Veröffentlichungsdatum: Wann wurden dieser Datensatz erstmalig angelegt/erzeugt? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem der Datensatz in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>date-time</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'date_released' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='date_updated' href='#date_updated'>date_updated</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Änderungsgsdatum: Wann wurden dieser Datensatz geändert? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem die geänderten Daten in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>date-time</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'date_updated' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='geographical_granularity' href='#geographical_granularity'>geographical_granularity</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Räumliche Auflösung: Die geographische Granularität des Datensatzes, eines Dokuments, einer App. Wird später zum Filtern verwendet.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>Keine</code>, <code>Deutschland</code>, <code>Berlin</code>, <code>Bezirk</code>, <code>Ortsteil</code>, <code>Prognoseraum</code>, <code>Bezirksregion</code>, <code>Planungsraum</code>, <code>Block</code>, <code>Einschulbereich</code>, <code>Kontaktbereich</code>, <code>PLZ</code>, <code>Stimmbezirk</code>, <code>Quartiersmanagement</code>, <code>Wohnanlage</code>, <code>Wahlkreis</code>, <code>Hausnummer</code>, <code>GPS-Koordinaten</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'geographical_granularity' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='geographical_coverage' href='#geographical_coverage'>geographical_coverage</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Räumliche Abdeckung: der geographische Bereich, der von dem Datensatz, dem Dokument oder der App abgedeckt wird. Wird zum Filtern verwendet.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>Keine</code>, <code>Adlershof</code>, <code>Alt-Hohenschönhausen</code>, <code>Alt-Treptow</code>, <code>Altglienicke</code>, <code>Baumschulenweg</code>, <code>Berlin</code>, <code>Biesdorf</code>, <code>Blankenburg</code>, <code>Blankenfelde</code>, <code>Bohnsdorf</code>, <code>Britz</code>, <code>Buch</code>, <code>Buckow</code>, <code>Charlottenburg</code>, <code>Charlottenburg-Nord</code>, <code>Charlottenburg-Wilmersdorf</code>, <code>Dahlem</code>, <code>Deutschland</code>, <code>Friedenau</code>, <code>Friedrichsfelde</code>, <code>Friedrichshagen</code>, <code>Friedrichshain</code>, <code>Friedrichshain-Kreuzberg</code>, <code>Frohnau</code>, <code>Gatow</code>, <code>Gesundbrunnen</code>, <code>Gropiusstadt</code>, <code>Grunewald</code>, <code>Grünau</code>, <code>Hakenfelde</code>, <code>Halensee</code>, <code>Hansaviertel</code>, <code>Haselhorst</code>, <code>Heiligensee</code>, <code>Heinersdorf</code>, <code>Hellersdorf</code>, <code>Hermsdorf</code>, <code>Hohenschönhausen</code>, <code>Johannisthal</code>, <code>Karlshorst</code>, <code>Karow</code>, <code>Kaulsdorf</code>, <code>Kladow</code>, <code>Köpenick</code>, <code>Kreuzberg</code>, <code>Lichtenberg</code>, <code>Lichtenrade</code>, <code>Lichterfelde</code>, <code>Lübars</code>, <code>Mahlsdorf</code>, <code>Malchow</code>, <code>Mariendorf</code>, <code>Marienfelde</code>, <code>Marzahn</code>, <code>Marzahn-Hellersdorf</code>, <code>Mitte</code>, <code>Moabit</code>, <code>Märkisches Viertel</code>, <code>Müggelheim</code>, <code>Neu-Hohenschönhausen</code>, <code>Neukölln</code>, <code>Niederschöneweide</code>, <code>Niederschönhausen</code>, <code>Nikolassee</code>, <code>Oberschöneweide</code>, <code>Pankow </code>, <code>Pankow</code>, <code>Plänterwald</code>, <code>Prenzlauer Berg</code>, <code>Rahnsdorf</code>, <code>Reinickendorf</code>, <code>Schmöckwitz</code>, <code>Schöneberg</code>, <code>Siemensstadt</code>, <code>Spandau</code>, <code>Staaken</code>, <code>Stadtrandsiedlung Malchow</code>, <code>Steglitz</code>, <code>Steglitz-Zehlendorf</code>, <code>Tegel</code>, <code>Tempelhof</code>, <code>Tempelhof-Schöneberg</code>, <code>Tiergarten</code>, <code>Treptow-Köpenick</code>, <code>Treptow</code>, <code>Waidmannslust</code>, <code>Wannsee</code>, <code>Wartenberg</code>, <code>Wedding</code>, <code>Weißensee</code>, <code>Westend</code>, <code>Wilhelmsruh</code>, <code>Wilhelmstadt</code>, <code>Wilmersdorf</code>, <code>Wittenau</code>, <code>Zehlendorf</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'geographical_coverage' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='temporal_coverage_from' href='#temporal_coverage_from'>temporal_coverage_from</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>date-time</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'temporal_coverage_from' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='temporal_coverage_to' href='#temporal_coverage_to'>temporal_coverage_to</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>date-time</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'temporal_coverage_to' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='temporal_granularity' href='#temporal_granularity'>temporal_granularity</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Zeitliche Auflösung: Die zeitliche Auflösung der enthaltenen Daten, des Dokuments oder der App. Wird später zum Filtern verwendet.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>Keine</code>, <code>5 Jahre</code>, <code>Jahr</code>, <code>Quartal</code>, <code>Monat</code>, <code>Woche</code>, <code>Tag</code>, <code>Stunde</code>, <code>Minute</code>, <code>Sekunde</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'temporal_granularity' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='groups' href='#groups'>groups</a></div>
+<div class='col-md-1 doc-property_type'>object (+)</div>
+<div class='col-md-2 doc-property_type'>Kategorien: Kategorien für die Datensätze und Dokumente. Die Kategorien sind statisch und werden vom Portalbetreiber langfristig gepflegt.</div>
+<div class='col-md-8'>
 
               <div class='row doc-properties'>
                 <div class='col-md-12'>
-
+      
                   <div class="row doc-header">
                     <div class="col-md-1 doc-label">
                       Title
@@ -459,33 +348,38 @@
                     <div class='col-md-8 doc-label'>
                       Definition
                     </div>
-                  </div>
-
-                  <div class='row doc-property doc-odd doc-required doc-footer'>
-                    <div class='col-md-1 doc-property_title'><a id='tags_name' href='#tags_name'>name</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'></div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                      </div>
-                    </div>
-                  </div> <!-- property 'name' -->
+                  </div>    
+            
+<div class='row doc-property doc-odd doc-required doc-footer'>
+<div class='col-md-1 doc-property_title'><a id='groups_name' href='#groups_name'>name</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'></div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>enum</dt>
+<dd>
+<code>arbeit</code>, <code>bildung</code>, <code>demographie</code>, <code>erholung</code>, <code>gesundheit</code>, <code>jugend</code>, <code>justiz</code>, <code>kultur</code>, <code>oeffentlich</code>, <code>sicherheit</code>, <code>sozial</code>, <code>tourismus</code>, <code>transport</code>, <code>umwelt</code>, <code>verbraucher</code>, <code>verentsorgung</code>, <code>verkehr</code>, <code>verwaltung</code>, <code>wahl</code>, <code>wirtschaft</code>, <code>wohnen</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'name' -->
 
                 </div> <!-- end col (doc-properties) -->
               </div> <!-- end row (doc-properties) -->
-
-            </div>
-          </div> <!-- property 'tags' -->
-          <div class='row doc-property doc-odd doc-footer'>
-            <div class='col-md-1 doc-property_title'><a id='resources' href='#resources'>resources</a></div>
-            <div class='col-md-1 doc-property_type'>object (+)</div>
-            <div class='col-md-2 doc-property_type'>Ressourcen: Folgende Felder können für jede Ressource individuell
-              angegeben werden.</div>
-            <div class='col-md-8'>
+            
+</div>
+</div> <!-- property 'groups' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='tags' href='#tags'>tags</a></div>
+<div class='col-md-1 doc-property_type'>object (+)</div>
+<div class='col-md-2 doc-property_type'>Schlagwörter: Freie Schlüsselwörter des Datensatzes, des Dokuments oder der App</div>
+<div class='col-md-8'>
 
               <div class='row doc-properties'>
                 <div class='col-md-12'>
-
+      
                   <div class="row doc-header">
                     <div class="col-md-1 doc-label">
                       Title
@@ -499,97 +393,125 @@
                     <div class='col-md-8 doc-label'>
                       Definition
                     </div>
-                  </div>
-
-                  <div class='row doc-property doc-odd doc-required'>
-                    <div class='col-md-1 doc-property_title'><a id='resources_url' href='#resources_url'>url</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'>URL: Verweis auf die eigentliche Datendatei, das Dokument
-                      oder die Anwendung.</div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                        <dl>
-                          <dt>format</dt>
-                          <dd>
-                            <code>uri</code>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div> <!-- property 'url' -->
-                  <div class='row doc-property doc-even doc-required'>
-                    <div class='col-md-1 doc-property_title'><a id='resources_format'
-                        href='#resources_format'>format</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'>Format: Typ der Ressource (MIME Types)</div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                      </div>
-                    </div>
-                  </div> <!-- property 'format' -->
-                  <div class='row doc-property doc-odd'>
-                    <div class='col-md-1 doc-property_title'><a id='resources_description'
-                        href='#resources_description'>description</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'>Beschreibung: Erläuterung, welche Rolle die Ressource für
-                      den Datensatz, das Dokument bzw. die App spielt (z. B. ob es sich dabei um eine bestimmte
-                      Zeitscheibe oder Schlüsselliste handelt. Der Beschreibungstext, wird mit dem Link zur Ressource
-                      unterlegt.)</div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                      </div>
-                    </div>
-                  </div> <!-- property 'description' -->
-                  <div class='row doc-property doc-even'>
-                    <div class='col-md-1 doc-property_title'><a id='resources_language'
-                        href='#resources_language'>language</a></div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'>Sprache: Sprache als ISO 639-1-Code, in der die Ressource
-                      verfasst ist.</div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                        <dl>
-                          <dt>pattern</dt>
-                          <dd>
-                            <code>^[a-z]{2}$</code>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div> <!-- property 'language' -->
-                  <div class='row doc-property doc-odd doc-footer'>
-                    <div class='col-md-1 doc-property_title'><a id='resources_hash' href='#resources_hash'>hash</a>
-                    </div>
-                    <div class='col-md-1 doc-property_type'>string (1)</div>
-                    <div class='col-md-2 doc-property_type'>Prüfsumme: Bei statischen Dateien die SHA2-Prüfsumme bzw.
-                      bei dynamischen Daten ein Zertifikat zur Überprüfung der Integrität.</div>
-                    <div class='col-md-8'>
-                      <div class='col-md-8'>
-                      </div>
-                    </div>
-                  </div> <!-- property 'hash' -->
+                  </div>    
+            
+<div class='row doc-property doc-odd doc-required doc-footer'>
+<div class='col-md-1 doc-property_title'><a id='tags_name' href='#tags_name'>name</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'></div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'name' -->
 
                 </div> <!-- end col (doc-properties) -->
               </div> <!-- end row (doc-properties) -->
+            
+</div>
+</div> <!-- property 'tags' -->
+<div class='row doc-property doc-even doc-footer'>
+<div class='col-md-1 doc-property_title'><a id='resources' href='#resources'>resources</a></div>
+<div class='col-md-1 doc-property_type'>object (+)</div>
+<div class='col-md-2 doc-property_type'>Ressourcen: Folgende Felder können für jede Ressource individuell angegeben werden.</div>
+<div class='col-md-8'>
 
-            </div>
-          </div> <!-- property 'resources' -->
+              <div class='row doc-properties'>
+                <div class='col-md-12'>
+      
+                  <div class="row doc-header">
+                    <div class="col-md-1 doc-label">
+                      Title
+                    </div>
+                    <div class="col-md-1 doc-label">
+                      Type
+                    </div>
+                    <div class="col-md-2 doc-label">
+                      Description
+                    </div>
+                    <div class='col-md-8 doc-label'>
+                      Definition
+                    </div>
+                  </div>    
+            
+<div class='row doc-property doc-odd doc-required'>
+<div class='col-md-1 doc-property_title'><a id='resources_url' href='#resources_url'>url</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>URL: Verweis auf die eigentliche Datendatei, das Dokument oder die Anwendung.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>format</dt>
+<dd>
+<code>uri</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'url' -->
+<div class='row doc-property doc-even doc-required'>
+<div class='col-md-1 doc-property_title'><a id='resources_format' href='#resources_format'>format</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Format: File-Format bzw. Typ der Ressource</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'format' -->
+<div class='row doc-property doc-odd'>
+<div class='col-md-1 doc-property_title'><a id='resources_description' href='#resources_description'>description</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Beschreibung: Erläuterung, welche Rolle die Ressource für den Datensatz, das Dokument bzw. die App spielt (z. B. ob es sich dabei um eine bestimmte Zeitscheibe oder Schlüsselliste handelt. Der Beschreibungstext, wird mit dem Link zur Ressource unterlegt.)</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'description' -->
+<div class='row doc-property doc-even'>
+<div class='col-md-1 doc-property_title'><a id='resources_language' href='#resources_language'>language</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Sprache: Sprache als ISO 639-1-Code, in der die Ressource verfasst ist.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+<dl>
+<dt>pattern</dt>
+<dd>
+<code>^[a-z]{2}$</code>
+</dd>
+</dl>
+</div>
+</div>
+</div> <!-- property 'language' -->
+<div class='row doc-property doc-odd doc-footer'>
+<div class='col-md-1 doc-property_title'><a id='resources_hash' href='#resources_hash'>hash</a></div>
+<div class='col-md-1 doc-property_type'>string (1)</div>
+<div class='col-md-2 doc-property_type'>Prüfsumme: Bei statischen Dateien die SHA2-Prüfsumme bzw. bei dynamischen Daten ein Zertifikat zur Überprüfung der Integrität.</div>
+<div class='col-md-8'>
+<div class='col-md-8'>
+</div>
+</div>
+</div> <!-- property 'hash' -->
 
-        </div> <!-- end col (doc-properties) -->
-      </div> <!-- end row (doc-properties) -->
+                </div> <!-- end col (doc-properties) -->
+              </div> <!-- end row (doc-properties) -->
+            
+</div>
+</div> <!-- property 'resources' -->
 
-    </div> <!-- end container -->
-  </div>
+                </div> <!-- end col (doc-properties) -->
+              </div> <!-- end row (doc-properties) -->
+            
+</div> <!-- end container -->
+</div>
 
-  <!--     <footer class="footer">
+<!--     <footer class="footer">
       <div class="container">
         <p class="text-muted">Place sticky footer content here.</p>
       </div>
     </footer>
- --> <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
- --> <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <!-- <script src="js/bootstrap.min.js"></script> -->
-</body>
-
+ -->    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ -->    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+  </body>
 </html>

@@ -1,9 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://datenregister.berlin.de/schema/berlin_od_schema.json",
+  "version": "2.3.1",
+  "dateModified": "2024-03-21",
   "title": "Berlin Open Data Schema",
   "description": "Schema to describe and validate dataset descriptions for the <a href='https://daten.berlin.de'>Berlin Open Data Portal</a>.",
   "type": "object",
-  "required": [ 
+  "required": [
     "title",
     "name",
     "berlin_type",
@@ -19,16 +22,20 @@
     "title": {
       "description": "Titel: Der Titel beschreibt den Datensatz, das Dokument oder die App prägnant und wird z. B. in Suchergebnissen und Listen angezeigt.",
       "type": "string"
-    }, 
+    },
     "name": {
       "description": "Name: Ein für Menschen lesbarer Bezeichner des Datensatzes, des Dokuments oder der Apps, der für eine Identifizierung genutzt werden kann (einfache ASCII-Präsentation des Titels, auch für die Pretty-Link-URL, Linked Data URIs)",
-      "pattern": "^[a-z0-9_-]{2,}$", 
+      "pattern": "^[a-z0-9_-]{2,}$",
       "type": "string"
-    }, 
+    },
     "berlin_type": {
-      "description": "Typ: Zeigt an, ob ein Datensatz, ein Dokument, eine App beschrieben wird. Entscheidet darüber, in welchem Bereich diese Metadaten angezeigt werden.", 
-      "type": "string", 
-      "enum": ["datensatz", "dokument", "app"] ,
+      "description": "Typ: Zeigt an, ob ein Datensatz, ein Dokument, eine App beschrieben wird. Entscheidet darüber, in welchem Bereich diese Metadaten angezeigt werden.",
+      "type": "string",
+      "enum": [
+        "datensatz",
+        "dokument",
+        "app"
+      ],
       "validator": "is_berlin_type"
     },
     "berlin_source": {
@@ -39,61 +46,67 @@
       "description": "Veröffentlichende Stelle: Die Behörde, von der die Daten stammen. Bei Apps der App-Hersteller.",
       "type": "string",
       "user_help_text": "Der Name der veröffentlichenden Stelle (Behörde, Unternehmen etc.), von der dieser Datensatz stammt."
-    }, 
+    },
     "author_email": {
       "description": "Veröffentlichende Stelle Email: Email-Adresse oder Kontaktformular der Veröffentlichenden Stelle.",
       "format": "uri",
       "type": "string"
-    }, 
+    },
     "maintainer": {
       "description": "Datenverantwortliche Stelle: Dieser Ansprechpartner kann bei Fragen und Anmerkungen zu den Daten kontaktiert werden.",
       "type": "string"
-    }, 
+    },
     "maintainer_email": {
       "description": "Datenverantwortliche Stelle Email: Email-Adresse oder Kontaktformular der Datenverantwortlichen Stelle.",
       "format": "uri",
       "type": "string"
-    }, 
+    },
     "url": {
-      "description": "Website: Die ursprüngliche Webadresse des Datensatzes, Dokuments oder der App, um zu weiteren Informationen über den Datensatz, das Dokument oder die App zu gelangen. Wird auf der Detailseite als Link angezeigt.", 
-      "type": "string", 
+      "description": "Website: Die ursprüngliche Webadresse des Datensatzes, Dokuments oder der App, um zu weiteren Informationen über den Datensatz, das Dokument oder die App zu gelangen. Wird auf der Detailseite als Link angezeigt.",
+      "type": "string",
       "format": "uri",
       "validator": "is_valid_url"
-    }, 
+    },
     "notes": {
       "description": "Beschreibung: Beschreibung und weitere Informationen zum Datensatz, zum Dokument oder zur App, wird auf der Detailseite dargestellt und kann mehrere Absätze umfassen.",
       "type": "string"
     },
+    "preview_image": {
+      "description": "Vorschaubild: Link zu einem Bild, das als Vorschau oder Illustration für den Datensatz dienen kann.",
+      "type": "string",
+      "format": "uri",
+      "validator": "is_valid_url"
+    },
     "license_id": {
       "enum": [
+        "cc-zero",
         "cc-by",
         "cc-by/4.0",
-        "cc-zero",
         "cc-by-sa",
-        "cc-nc",
+        "cc-by-nc",
         "dl-de-zero-2.0",
         "dl-de-by-2.0",
         "odc-odbl",
         "other-closed"
       ],
       "labels": [
-        "Creative Commons Attribution" ,
-        "Creative Commons Attribution 4.0" ,
-        "Creative Commons Zero" ,
-        "Creative Commons Attribution Share-Alike" ,
-        "Creative Commons Non-Commercial (Any)" ,
-        "Datenlizenz Deutschland – Zero – Version 2.0" ,
-        "Datenlizenz Deutschland – Namensnennung – Version 2.0" ,
-        "Open Data Commons Open Database License" ,
+        "Creative Commons Zero",
+        "Creative Commons Attribution",
+        "Creative Commons Attribution 4.0",
+        "Creative Commons Attribution Share-Alike",
+        "Creative Commons Non-Commercial (Any)",
+        "Datenlizenz Deutschland – Zero – Version 2.0",
+        "Datenlizenz Deutschland – Namensnennung – Version 2.0",
+        "Open Data Commons Open Database License (ODbL)",
         "Siehe Website des Datensatzes"
       ],
-      "type": "string", 
+      "type": "string",
       "description": "Lizenz-ID: Lizenz aus einer festen Liste, s.u. bzw. <a href='http://datenregister.berlin.de/licenses/berlin-od-portal.json'>http://datenregister.berlin.de/licenses/berlin-od-portal.json</a>",
       "validator": "is_license_id",
       "user_help_text": "Die Lizenz bestimmt, zu welchen Bedingungen der Datensatz genutzt werden darf. Grundsätzlich erlauben alle Lizenzen, die im Datenportal genutzt werden, eine fast uneigeschränkte Nutzung. Einen Link zum vollständigen Lizenztext kann man auf der Seite des jeweiligen Datensatzes finden."
     },
     "attribution_text": {
-      "description": "Der exakte Text, der im Rahmen der Namensnennung anzugeben ist." ,
+      "description": "Der exakte Text, der im Rahmen der Namensnennung anzugeben ist.",
       "type": "string"
     },
     "username": {
@@ -102,18 +115,18 @@
     },
     "date_released": {
       "description": "Veröffentlichungsdatum: Wann wurden dieser Datensatz erstmalig angelegt/erzeugt? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem der Datensatz in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.",
-      "type": "string", 
+      "type": "string",
       "format": "date-time",
       "validator": "isodate_notime"
     },
     "date_updated": {
       "description": "Änderungsgsdatum: Wann wurden dieser Datensatz geändert? Wichtig: dies beschreibt nicht zwingend den Zeitpunkt, an dem die geänderten Daten in das Datenregister eingepflegt wurde, sondern kann auch davor liegen.",
-      "type": "string", 
+      "type": "string",
       "format": "date-time",
       "validator": "isodate_notime"
     },
     "geographical_granularity": {
-      "description": "Räumliche Auflösung: Die geographische Granularität des Datensatzes, eines Dokuments, einer App. Wird später zum Filtern verwendet.", 
+      "description": "Räumliche Auflösung: Die geographische Granularität des Datensatzes, eines Dokuments, einer App. Wird später zum Filtern verwendet.",
       "enum": [
         "Keine",
         "Deutschland",
@@ -244,20 +257,20 @@
       "user_help_text": "Auf welches Gebiet beziehen sich die Daten? Wird ganz Berlin abgedeckt, oder vielleicht nur ein bestimmter Bezirk, oder sogar nur eine bestimmte Bezirksregion?"
     },
     "temporal_coverage_from": {
-      "description": "Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
-      "type": "string", 
+      "description": "Start-Datum: Der Zeitpunkt, von dem an der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.",
+      "type": "string",
       "format": "date-time",
       "validator": "isodate_notime"
-    }, 
+    },
     "temporal_coverage_to": {
-      "description": "End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.", 
-      "type": "string", 
+      "description": "End-Datum: Der Zeitpunkt, bis zu dem der Datensatz, das Dokument oder die App einschließlich Daten enthält. Wird insb. zum Filtern verwendet.",
+      "type": "string",
       "format": "date-time",
       "validator": "isodate_notime"
-    }, 
+    },
     "temporal_granularity": {
-      "description": "Zeitliche Auflösung: Die zeitliche Auflösung der enthaltenen Daten, des Dokuments oder der App. Wird später zum Filtern verwendet.", 
-      "type": "string", 
+      "description": "Zeitliche Auflösung: Die zeitliche Auflösung der enthaltenen Daten, des Dokuments oder der App. Wird später zum Filtern verwendet.",
+      "type": "string",
       "enum": [
         "Keine",
         "5 Jahre",
@@ -278,77 +291,81 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [ "name" ],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "enum": [
-              "arbeit", 
-              "bildung", 
-              "demographie", 
-              "erholung", 
-              "gesundheit", 
-              "jugend", 
-              "justiz", 
-              "kultur", 
-              "oeffentlich", 
-              "sicherheit", 
-              "sozial", 
-              "tourismus" ,
-              "transport", 
-              "umwelt", 
-              "verbraucher", 
-              "verentsorgung", 
-              "verkehr", 
-              "verwaltung", 
-              "wahl", 
-              "wirtschaft", 
+              "arbeit",
+              "bildung",
+              "demographie",
+              "erholung",
+              "gesundheit",
+              "jugend",
+              "justiz",
+              "kultur",
+              "oeffentlich",
+              "sicherheit",
+              "sozial",
+              "tourismus",
+              "transport",
+              "umwelt",
+              "verbraucher",
+              "verentsorgung",
+              "verkehr",
+              "verwaltung",
+              "wahl",
+              "wirtschaft",
               "wohnen"
-            ], 
+            ],
             "labels": [
-              "Arbeitsmarkt" ,
-              "Bildung" ,
-              "Demographie" ,
-              "Erhohlung" ,
-              "Gesundheit" ,
-              "Jugend" ,
-              "Justiz" ,
-              "Kunst und Kultur" ,
-              "Öffentliche Verwaltung, Haushalt und Steuern" ,
-              "Sicherheit" ,
-              "Sozialleistungen" ,
-              "Tourismus" ,
-              "Transport" ,
-              "Umwelt und Klima" ,
-              "Verbraucherschutz" ,
-              "Ver- und Entsorgung" ,
-              "Verkehr" ,
-              "Verwaltung" ,
-              "Wahlen" ,
-              "Wirtschaft" ,
+              "Arbeitsmarkt",
+              "Bildung",
+              "Demographie",
+              "Erhohlung",
+              "Gesundheit",
+              "Jugend",
+              "Justiz",
+              "Kunst und Kultur",
+              "Öffentliche Verwaltung, Haushalt und Steuern",
+              "Sicherheit",
+              "Sozialleistungen",
+              "Tourismus",
+              "Transport",
+              "Umwelt und Klima",
+              "Verbraucherschutz",
+              "Ver- und Entsorgung",
+              "Verkehr",
+              "Verwaltung",
+              "Wahlen",
+              "Wirtschaft",
               "Wohnen und Immobilien"
-              ] ,
-              "type": "string"
-            }
-          }
-        },
-        "user_help_text": "Die Kategorie ermöglicht eine grobe inhaltliche Einordnung des Datensatzes in verschiedene Themengebiete."
-    },
-    "tags": {
-        "description": "Schlagwörter: Freie Schlüsselwörter des Datensatzes, des Dokuments oder der App",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "required": [ "name" ],
-          "properties": {
-            "name": {
-              "type": "string"
-            }
+            ],
+            "type": "string"
           }
         }
+      },
+      "user_help_text": "Die Kategorie ermöglicht eine grobe inhaltliche Einordnung des Datensatzes in verschiedene Themengebiete."
+    },
+    "tags": {
+      "description": "Schlagwörter: Freie Schlüsselwörter des Datensatzes, des Dokuments oder der App",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
     },
     "resources": {
       "description": "Ressourcen: Folgende Felder können für jede Ressource individuell angegeben werden.",
-      "type": "array", 
+      "type": "array",
       "items": {
         "type": "object",
         "required": [
@@ -357,28 +374,28 @@
         ],
         "properties": {
           "url": {
-            "description": "URL: Verweis auf die eigentliche Datendatei, das Dokument oder die Anwendung.", 
-            "type": "string", 
+            "description": "URL: Verweis auf die eigentliche Datendatei, das Dokument oder die Anwendung.",
+            "type": "string",
             "format": "uri"
           },
           "format": {
-            "description": "Format: Typ der Ressource (MIME Types)",
+            "description": "Format: File-Format bzw. Typ der Ressource",
             "type": "string",
             "user_help_text": "Die Formate der Datenressourcen, die zu diesem Datensatz gehören. Beispiele sind CSV, XML, JSON, RDF etc."
           },
           "description": {
             "description": "Beschreibung: Erläuterung, welche Rolle die Ressource für den Datensatz, das Dokument bzw. die App spielt (z. B. ob es sich dabei um eine bestimmte Zeitscheibe oder Schlüsselliste handelt. Der Beschreibungstext, wird mit dem Link zur Ressource unterlegt.)",
             "type": "string"
-          }, 
+          },
           "language": {
             "description": "Sprache: Sprache als ISO 639-1-Code, in der die Ressource verfasst ist.",
-            "pattern": "^[a-z]{2}$", 
+            "pattern": "^[a-z]{2}$",
             "type": "string"
-          }, 
+          },
           "hash": {
             "description": "Prüfsumme: Bei statischen Dateien die SHA2-Prüfsumme bzw. bei dynamischen Daten ein Zertifikat zur Überprüfung der Integrität.",
             "type": "string"
-          } 
+          }
         }
       }
     }

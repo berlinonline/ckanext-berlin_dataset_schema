@@ -180,6 +180,12 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_converter('is_valid_url')
             ]
         })
+        schema.update({
+            'preview_image': [
+                toolkit.get_converter('is_valid_url'),
+                toolkit.get_converter('convert_to_extras')
+            ]
+        })
         schema.update({'license_id': [
             toolkit.get_converter('is_license_id'),
         ]})
@@ -230,6 +236,12 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).show_package_schema()
+        schema.update({
+            'preview_image': [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing')
+            ]
+        })
         schema.update({
             'username': [
                 toolkit.get_converter('convert_from_extras'),
