@@ -2,6 +2,8 @@
 
 ## Development
 
+- Add new metadata field `sample_record` (to link to the matching "Musterdatensatz", see https://www.dcat-ap.de/def/dcatde/2.0/implRules/#verwendung-des-musterdatenkatalogs-fur-kommunen).
+
 ## [0.3.5](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.5)
 
 _(2024-03-21)_

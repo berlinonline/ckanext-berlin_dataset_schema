@@ -220,7 +220,10 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('is_geo_feature'),
             toolkit.get_converter('convert_to_extras')
         ]})
-
+        schema.update({'sample_record': [
+            toolkit.get_converter('is_sample_record'),
+            toolkit.get_converter('convert_to_extras')
+        ]})
         schema = self._prepend_required_validator(schema)
 
         return schema
@@ -312,6 +315,12 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_validator('ignore_missing')
             ]
         })
+        schema.update({
+            'sample_record': [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing')
+            ]
+        })
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         return schema
 
@@ -374,7 +383,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             "is_geo_feature": validator.is_geo_feature ,
             "is_geo_granularity": validator.is_geo_granularity ,
             "is_temporal_granularity": validator.is_temporal_granularity ,
-            "is_group_name_valid": validator.is_group_name_valid
+            "is_group_name_valid": validator.is_group_name_valid,
+            "is_sample_record": validator.is_sample_record ,
         }
 
     # -------------------------------------------------------------------

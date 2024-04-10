@@ -80,7 +80,7 @@ class Schema(plugins.SingletonPlugin):
             return None
         raise SchemaError("JSON Schema does not contain 'properties' attribute.")
 
-    def enum_for_attribute(self, attribute):
+    def enum_for_attribute(self, attribute) -> list:
         """
         Helper function that returns the enum definition for a given attribute.
         """
