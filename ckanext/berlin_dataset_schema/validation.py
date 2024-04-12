@@ -73,6 +73,13 @@ class Validator(object):
         enum = self.json_schema.enum_for_attribute('sample_record')
         return enum
     
+    def hvd_categories(self) -> list:
+        '''
+        Return the currently valid values of the 'hvd_category' metadatum.
+        '''
+        enum = self.json_schema.enum_for_attribute('hvd_category')
+        return enum
+    
     def isodate_notime(self, value):
         """
         Validator function to check that a value corresponds to the
@@ -158,6 +165,14 @@ class Validator(object):
         values for the metadatum 'sample_record'.
         '''
         value_space = self.sample_records()
+        return self.is_in_enum(value, value_space)
+        
+    def is_hvd_category(self, value: str):
+        '''
+        Validator function to check that a value is one of the currently available
+        values for the metadatum 'hvd_category'.
+        '''
+        value_space = self.hvd_categories()
         return self.is_in_enum(value, value_space)
         
     def is_group_name_valid(self, name, context):
