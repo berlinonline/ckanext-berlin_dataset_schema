@@ -300,3 +300,58 @@ class TestIsGroupNameValid:
                 result = False
             assert result is False
 
+
+class TestIsSampleRecord:
+    """
+    Tests for validation.is_sample_record() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    def test_is_sample_record_raises_invalid_error_for_bad_value(self):
+        with pytest.raises(df.Invalid):
+            self.validator.is_sample_record('Dumdum')
+
+    def test_is_sample_record_gives_correct_answer(self):
+        sample_records = [ 
+            'abfallentsorgung',
+            'bau/grundstuecksbewertung',
+            'bevoelkerungsstruktur/staatsangehoerigkeit',
+            'bildung/kindertageseinrichtung/standort',
+            'finanzen/haushalt/ausserplanmaessigeAufwendungen',
+            'floraUndFauna/flaeche/naturschutzgebiet',
+            'raumplanung',
+            'wirtschaft/wirtschaftsfoerderung',
+            'wirtschaft/wirtschaftsstandort',
+        ]
+        for _sample_record in sample_records:
+            actual = self.validator.is_sample_record(_sample_record)
+            expected = _sample_record
+            assert actual is expected, "%s != %s" % ( actual, expected)
+
+class TestIsHVDCategory:
+    """
+    Tests for validation.is_hvd_category() validator.
+    """
+
+    def setup(self):
+        self.validator = Validator()
+
+    def test_is_hvd_category_raises_invalid_error_for_bad_value(self):
+        with pytest.raises(df.Invalid):
+            self.validator.is_hvd_category('Dumdum')
+
+    def test_is_hvd_category_gives_correct_answer(self):
+        hvd_categories = [ 
+            'c_a9135398',
+            'c_e1da4e07',
+            'c_164e0bf5',
+            'c_ac64a52d',
+            'c_b79e35eb',
+            'c_dd313021',
+        ]
+        for _hvd_category in hvd_categories:
+            actual = self.validator.is_hvd_category(_hvd_category)
+            expected = _hvd_category
+            assert actual is expected, "%s != %s" % ( actual, expected)
