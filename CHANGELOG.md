@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.3.7](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.7)
+
+_(2024-05-29)_
+
+- Add user help text to `tags` in JSON schema.
+
 ## [0.3.6](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.6)
 
 _(2024-04-25)_
