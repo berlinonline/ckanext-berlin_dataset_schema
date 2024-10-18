@@ -16,7 +16,7 @@ This plugin has been tested with CKAN 2.9.10 (which requires Python 3).
 
 ## License
 
-This material is copyright © [BerlinOnline Stadtportal GmbH & Co. KG](https://www.berlinonline.net/).
+This material is copyright © [BerlinOnline GmbH](https://www.berlinonline.net/).
 
 This extension is open and licensed under the GNU Affero General Public License (AGPL) v3.0.
 Its full text may be found at:
