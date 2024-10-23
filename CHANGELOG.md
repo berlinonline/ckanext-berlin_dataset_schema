@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.3.8](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.8)
+
+_(2024-10-23)_
+
 - Add `hvd_category` and `sample_record` to the documentation of the metadata schema at https://datenregister.berlin.de/schema/.
 - Add `gleichstellung` (gender equality) as a thematic category to the metadata schema.
 - Change BerlinOnline company name to "BerlinOnline GmbH".
