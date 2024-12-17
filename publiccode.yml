@@ -1,0 +1,51 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+name: ckanext-berlin_dataset_schema
+applicationSuite: CKAN
+url: 'https://github.com/berlinonline/ckanext-berlin_dataset_schema'
+releaseDate: '2018-10-30'
+softwareVersion: 0.3.9
+developmentStatus: stable
+softwareType: standalone/iot
+platforms:
+  - web
+categories:
+  - it-development
+  - knowledge-management
+maintenance:
+  type: internal
+  contacts:
+    - name: Dr. Knud Möller
+      email: knud.moeller@berlinonline.de
+legal:
+  license: AGPL-3.0-only
+  mainCopyrightOwner: ' BerlinOnline GmbH'
+  repoOwner: ' BerlinOnline GmbH'
+localisation:
+  localisationReady: false
+description:
+  en:
+    genericName: ckanext-berlin_dataset_schema
+    documentation: >-
+      https://github.com/berlinonline/ckanext-berlin_dataset_schema/?tab=readme-ov-file#ckanext-berlin_dataset_schema
+    shortDescription: >-
+      Implementation of IDatasetForm, IValidators, IFacets and IBlueprint to
+      provide a custom dataset schema for the Berlin Open Data Portal.
+    longDescription: >
+      Implementation of
+      [IDatasetForm](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm),
+      [IValidators](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IValidators),
+      [IFacets](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IFacets)
+      and
+      [IBlueprint](https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IBlueprint)
+      to provide a custom dataset schema for the [Berlin Open Data
+      Portal](https://daten.berlin.de/).
+
+
+      ## Requirements
+
+
+      This plugin has been tested with CKAN 2.9.10 (which requires Python 3).
