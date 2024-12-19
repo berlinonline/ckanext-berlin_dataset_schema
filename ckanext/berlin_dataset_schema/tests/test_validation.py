@@ -3,37 +3,84 @@
 
 import logging
 from datetime import datetime
-import pytest
+
 import ckan.lib.navl.dictization_functions as df
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
+import pytest
+from ckan.tests.pytest_ckan.fixtures import reset_db
+
 from ckanext.berlin_dataset_schema.validation import Validator
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
+
+@pytest.fixture
+def validator():
+    return Validator()
+
+@pytest.fixture
+def groups(reset_db):
+    reset_db()
+    groups = []
+    group_names = [
+        u'arbeit',
+        u'bildung',
+        u'demographie',
+        u'erholung',
+        u'geo',
+        u'verkehr',
+        u'verwaltung',
+        u'wahl',
+    ]
+    for group_name in group_names:
+        groups.append(factories.Group(name=group_name))
+    return groups
+
+@pytest.fixture
+def user(groups):
+    user = factories.User()
+    for group in groups:
+        helpers.call_action(
+            'member_create',
+            id=group['id'],
+            object=user['id'],
+            object_type='user',
+            capacity='editor'
+        )
+    return user
+
+@pytest.fixture
+def restricted_groups(groups):
+    restricted_groups = []
+    restricted_group_names = [
+        u'wirtschaft',
+        u'wohnen',
+    ]
+    for group_name in restricted_group_names:
+        restricted_groups.append(factories.Group(name=group_name))
+    return restricted_groups
+
 
 class TestIsodateNotime:
     """
     Tests for validation.isodate_notime() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
+    def test_isodate_notime_empty_is_none(self, validator):
+        assert validator.isodate_notime('') is None
 
-    def test_isodate_notime_empty_is_none(self):
-        assert self.validator.isodate_notime('') is None
+    def test_isodate_notime_datetime_object_is_truncated(self, validator):
+        assert validator.isodate_notime(datetime(1969, 9, 6, 7, 43, 23, 10)) == "1969-09-06"
 
-    def test_isodate_notime_datetime_object_is_truncated(self):    
-        assert self.validator.isodate_notime(datetime(1969, 9, 6, 7, 43, 23, 10)) == "1969-09-06"
+    def test_isodate_notime_datetime_string_is_truncated(self, validator):
+        assert validator.isodate_notime("1969-09-06T07:43:23.10") == "1969-09-06"
 
-    def test_isodate_notime_datetime_string_is_truncated(self):
-        assert self.validator.isodate_notime("1969-09-06T07:43:23.10") == "1969-09-06"
+    def test_isodate_notime_illegal_string_after_date_is_ignored(self, validator):
+        assert validator.isodate_notime("1969-09-06foo bar") == "1969-09-06"
 
-    def test_isodate_notime_illegal_string_after_date_is_ignored(self):
-        assert self.validator.isodate_notime("1969-09-06foo bar") == "1969-09-06"
-
-    def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error(self):
+    def test_isodate_notime_datetime_illegal_date_string_raises_invalid_error(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.isodate_notime("foor bar")
+            validator.isodate_notime("foor bar")
 
 # -------------------
 
@@ -42,10 +89,7 @@ class TestIsValidUrl:
     Tests for validation.is_berlin_type() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_valid_urls_are_accepted(self):
+    def test_valid_urls_are_accepted(self, validator):
         urls = [
             "http://www.test.org" ,
             "https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" ,
@@ -54,7 +98,7 @@ class TestIsValidUrl:
             "" # empty URL is valid (robustness, etc.)
         ]
         for url in urls:
-            assert self.validator.is_valid_url(url) == url
+            assert validator.is_valid_url(url) == url
 
     @pytest.mark.parametrize("url", [
         "noscheme",
@@ -63,9 +107,9 @@ class TestIsValidUrl:
         "foonz://www.berlin.de",  # unknown/invalid scheme
         "https://www.berlin.de/sen/wirtschaft/  ",  # trailing whitespace
     ])
-    def test_reject_invalid_url(self, url):
+    def test_reject_invalid_url(self, url, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_valid_url(url)
+            validator.is_valid_url(url)
 
 # -------------------
 
@@ -74,17 +118,14 @@ class TestIsBerlinType:
     Tests for validation.is_berlin_type() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_berlin_type_raises_invalid_error_for_bad_value(self):
+    def test_is_berlin_type_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_berlin_type('goo star')
+            validator.is_berlin_type('goo star')
 
-    def test_is_berlin_type_gives_correct_answer(self):
+    def test_is_berlin_type_gives_correct_answer(self, validator):
         berlin_types = [ 'datensatz', 'dokument', 'app' ]
         for _type in berlin_types:
-            actual = self.validator.is_berlin_type(_type)
+            actual = validator.is_berlin_type(_type)
             expected = _type
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -95,17 +136,14 @@ class TestIsLicenseId:
     Tests for validation.is_license_id() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_license_id_raises_invalid_error_for_bad_value(self):
+    def test_is_license_id_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_license_id('unlicensed')
+            validator.is_license_id('unlicensed')
 
-    def test_is_license_id_gives_correct_answer(self):
+    def test_is_license_id_gives_correct_answer(self, validator):
         license_ids = ["cc-by", "cc-by/4.0", "cc-zero", "cc-by-sa", "cc-by-nc", "dl-de-zero-2.0", "dl-de-by-2.0", "odc-odbl", "other-closed" ]
         for _id in license_ids:
-            actual = self.validator.is_license_id(_id)
+            actual = validator.is_license_id(_id)
             expected = _id
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -116,14 +154,11 @@ class TestIsGeoFeature:
     Tests for validation.is_geo_feature() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_geo_feature_raises_invalid_error_for_bad_value(self):
+    def test_is_geo_feature_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_geo_feature('Hamburg')
+            validator.is_geo_feature('Hamburg')
 
-    def test_is_geo_feature_gives_correct_answer(self):
+    def test_is_geo_feature_gives_correct_answer(self, validator):
         geo_features = [
             u'Keine',
             u'Adlershof',
@@ -137,7 +172,7 @@ class TestIsGeoFeature:
             u'Weißensee',
         ]
         for _feature in geo_features:
-            actual = self.validator.is_geo_feature(_feature)
+            actual = validator.is_geo_feature(_feature)
             expected = _feature
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -148,14 +183,11 @@ class TestIsGeoGranularity:
     Tests for validation.is_geo_granularity() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_geo_granularity_raises_invalid_error_for_bad_value(self):
+    def test_is_geo_granularity_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_geo_granularity('Dumdum')
+            validator.is_geo_granularity('Dumdum')
 
-    def test_is_geo_granularity_gives_correct_answer(self):
+    def test_is_geo_granularity_gives_correct_answer(self, validator):
         geo_granularities = [
             'Keine',
             'Deutschland',
@@ -175,7 +207,7 @@ class TestIsGeoGranularity:
             'Wahlkreis'
         ]
         for _granularity in geo_granularities:
-            actual = self.validator.is_geo_granularity(_granularity)
+            actual = validator.is_geo_granularity(_granularity)
             expected = _granularity
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -186,14 +218,11 @@ class TestIsTemporalGranularity:
     Tests for validation.is_temporal_granularity() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_temporal_granularity_raises_invalid_error_for_bad_value(self):
+    def test_is_temporal_granularity_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_temporal_granularity('Dumdum')
+            validator.is_temporal_granularity('Dumdum')
 
-    def test_is_temporal_granularity_gives_correct_answer(self):
+    def test_is_temporal_granularity_gives_correct_answer(self, validator):
         temporal_granularities = [ 
             'Keine',
             '5 Jahre',
@@ -207,7 +236,7 @@ class TestIsTemporalGranularity:
             'Sekunde'
         ]
         for _granularity in temporal_granularities:
-            actual = self.validator.is_temporal_granularity(_granularity)
+            actual = validator.is_temporal_granularity(_granularity)
             expected = _granularity
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -218,12 +247,9 @@ class TestIsInEnum:
     Tests for validation.is_in_enum() helper (mostly covered by other test classes).
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_in_enum_valuespace_must_be_list(self):
+    def test_is_in_enum_valuespace_must_be_list(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_in_enum('foo', 'bar')
+            validator.is_in_enum('foo', 'bar')
 
 
 # -------------------
@@ -233,69 +259,31 @@ class TestIsGroupNameValid:
     Tests for validation.is_group_name_valid() check.
     """
 
-    def setup(self):
-        """
-        Set up some groups and a user that is member of some of them, 
-        but not others.
-        """
-
-        self.validator = Validator()
-        helpers.reset_db()
-        self.groups = []
-        group_names = [
-            u'arbeit',
-            u'bildung',
-            u'demographie',
-            u'erholung',
-            u'geo',
-            u'verkehr',
-            u'verwaltung',
-            u'wahl',
-        ]
-        for group_name in group_names:
-            self.groups.append(factories.Group(name=group_name))
-        self.user = factories.User()
-        for group in self.groups:
-            helpers.call_action(
-                'member_create',
-                id=group['id'],
-                object=self.user['id'],
-                object_type='user',
-                capacity='editor'
-            )
-        self.restricted_groups = []
-        restricted_group_names = [
-            u'wirtschaft',
-            u'wohnen',
-        ]
-        for group_name in restricted_group_names:
-            self.restricted_groups.append(factories.Group(name=group_name))
-
-    def test_empty_is_an_invalid_group_name(self):
+    def test_empty_is_an_invalid_group_name(self, validator, user):
         """
         Group names that don't exist should be invalid.
         """
-        context = { 'user': self.user['name'] }
+        context = { 'user': user['name'] }
         with pytest.raises(df.Invalid):
-            self.validator.is_group_name_valid('empty', context)
+            validator.is_group_name_valid('empty', context)
 
-    def test_group_names_are_valid_group_names(self):
+    def test_group_names_are_valid_group_names(self, validator, groups, user):
         """
         Group names that exist and of which the user is a member should be valid.
         """
-        context = { 'user': self.user['name'] }
-        for group in self.groups:
-            assert self.validator.is_group_name_valid(group['name'], context) is group['name']
+        context = { 'user': user['name'] }
+        for group in groups:
+            assert validator.is_group_name_valid(group['name'], context) is group['name']
 
-    def test_restricted_group_is_invalid(self):
+    def test_restricted_group_is_invalid(self, validator, restricted_groups, user):
         """
         Group names that exist but of which the user is not a member should be invalid.
         """
-        context = { 'user': self.user['name'] }
-        for group in self.restricted_groups:
+        context = { 'user': user['name'] }
+        for group in restricted_groups:
             result = True
             try:
-                self.validator.is_group_name_valid(group['name'], context)
+                validator.is_group_name_valid(group['name'], context)
             except df.Invalid:
                 result = False
             assert result is False
@@ -306,14 +294,11 @@ class TestIsSampleRecord:
     Tests for validation.is_sample_record() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_sample_record_raises_invalid_error_for_bad_value(self):
+    def test_is_sample_record_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_sample_record('Dumdum')
+            validator.is_sample_record('Dumdum')
 
-    def test_is_sample_record_gives_correct_answer(self):
+    def test_is_sample_record_gives_correct_answer(self, validator):
         sample_records = [ 
             'abfallentsorgung',
             'bau/grundstuecksbewertung',
@@ -326,7 +311,7 @@ class TestIsSampleRecord:
             'wirtschaft/wirtschaftsstandort',
         ]
         for _sample_record in sample_records:
-            actual = self.validator.is_sample_record(_sample_record)
+            actual = validator.is_sample_record(_sample_record)
             expected = _sample_record
             assert actual is expected, "%s != %s" % ( actual, expected)
 
@@ -335,14 +320,11 @@ class TestIsHVDCategory:
     Tests for validation.is_hvd_category() validator.
     """
 
-    def setup(self):
-        self.validator = Validator()
-
-    def test_is_hvd_category_raises_invalid_error_for_bad_value(self):
+    def test_is_hvd_category_raises_invalid_error_for_bad_value(self, validator):
         with pytest.raises(df.Invalid):
-            self.validator.is_hvd_category('Dumdum')
+            validator.is_hvd_category('Dumdum')
 
-    def test_is_hvd_category_gives_correct_answer(self):
+    def test_is_hvd_category_gives_correct_answer(self, validator):
         hvd_categories = [ 
             'c_a9135398',
             'c_e1da4e07',
@@ -352,6 +334,6 @@ class TestIsHVDCategory:
             'c_dd313021',
         ]
         for _hvd_category in hvd_categories:
-            actual = self.validator.is_hvd_category(_hvd_category)
+            actual = validator.is_hvd_category(_hvd_category)
             expected = _hvd_category
             assert actual is expected, "%s != %s" % ( actual, expected)
