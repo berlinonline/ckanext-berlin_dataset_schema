@@ -2,6 +2,16 @@
 
 ## Development
 
+## [0.3.9](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.9)
+
+_(2024-12-19)_
+
+- Fix tests:
+    - use fixtures rather than setup functions
+    - use `with pytest.raises` blocks rather than decorators
+    - fix test setup for GitHub CI
+- Add OpenCode `publiccode.yml` file.
+
 ## [0.3.8](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.8)
 
 _(2024-10-23)_
