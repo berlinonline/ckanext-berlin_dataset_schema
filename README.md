@@ -1,7 +1,7 @@
 # ckanext-berlin_dataset_schema
 
-[![Tests](https://github.com/berlinonline/ckanext-berlin_dataset_schema/workflows/Tests/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-berlin_dataset_schema/actions)
-[![Code Coverage](http://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema/coverage.svg?branch=master)](http://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema?branch=master)
+[![Tests](https://github.com/berlinonline/ckanext-berlin_dataset_schema/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-berlin_dataset_schema/actions)
+[![Code Coverage](https://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema/coverage.svg?branch=master)](http://codecov.io/github/berlinonline/ckanext-berlin_dataset_schema?branch=master)
 
 Implementation of 
 [IDatasetForm](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm),
