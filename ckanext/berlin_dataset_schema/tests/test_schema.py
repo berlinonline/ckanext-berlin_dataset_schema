@@ -87,6 +87,8 @@ class TestEmptySchema(object):
         dir_path = os.path.dirname(path)
         schema_path = os.path.join(dir_path, "resources", "berlin_od_schema_empty.json")
         schema.Schema().load_schema(schema_path)
+        assert schema.Schema().schema == { "foo": "bar" }
+        # assert len(schema.Schema().schema.keys()) == 0
 
     def teardown(self):
         schema.Schema().unload_schema()
