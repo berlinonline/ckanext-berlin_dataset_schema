@@ -99,3 +99,4 @@ class SchemaError(Exception):
     """
     Errors when handling the JSON schema.
     """
+    pass
