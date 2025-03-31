@@ -7,7 +7,7 @@ name: ckanext-berlin_dataset_schema
 applicationSuite: CKAN
 url: 'https://github.com/berlinonline/ckanext-berlin_dataset_schema'
 releaseDate: '2018-10-30'
-softwareVersion: 0.3.9
+softwareVersion: 0.3.10
 developmentStatus: stable
 softwareType: standalone/iot
 platforms:
