@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.3.10](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.10)
+
+_(2025-03-31)_
+
+- Extend the list of HVDs beyond top-concepts.
+
 ## [0.3.9](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.9)
 
 _(2024-12-19)_
