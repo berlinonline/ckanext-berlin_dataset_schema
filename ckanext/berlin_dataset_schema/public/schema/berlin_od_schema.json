@@ -845,6 +845,12 @@
       ],
       "validator": "is_sample_record"
     },
+    "data_anonymized": {
+      "description": "Daten anonymisiert: Falls die Rohdaten einen Personenbezug enthalten: Sind die Datenressourcen vor der Veröffentlichung anonymisiert worden?",
+      "type": "boolean",
+      "validator": "is_true_boolean",
+      "user_help_text": "Sind die Datenressourcen anonymisiert worden?"
+    },
     "resources": {
       "description": "Ressourcen: Folgende Felder können für jede Ressource individuell angegeben werden.",
       "type": "array",

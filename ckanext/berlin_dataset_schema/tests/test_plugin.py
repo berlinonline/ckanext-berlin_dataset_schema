@@ -20,11 +20,11 @@ PLUGIN_NAME = 'berlin_dataset_schema'
 log = logging.getLogger(__name__)
 get_action = logic.get_action
 
+@pytest.mark.ckan_config('ckan.plugins', f"{PLUGIN_NAME}")
 class TestSchemaGeneration(object):
 
     @classmethod
     def setup_class(cls):
-        ckan.plugins.load(PLUGIN_NAME)
 
         cls.required_atomics = [
             "author" ,
@@ -57,12 +57,6 @@ class TestSchemaGeneration(object):
             "resources" ,
             "tags" ,
         ]
-
-
-
-    @classmethod
-    def teardown_class(cls):
-        ckan.plugins.unload(PLUGIN_NAME)
 
     def _test_schema_sanity(self, schema):
         """
@@ -150,7 +144,8 @@ class TestSchemaGeneration(object):
             'license_id': 'unlicensed' ,
             'temporal_granularity': 'foo' ,
             'geographical_coverage': 'Hamburg' ,
-            'geographical_granularity': 'Atom'
+            'geographical_granularity': 'Atom',
+            'data_anonymized': 4,
         }
         mock_model = mock.MagicMock()
         mock_session = mock_model.session
@@ -172,6 +167,7 @@ class TestSchemaGeneration(object):
         assert 'temporal_granularity' in errors_unflattened
         assert 'geographical_granularity' in errors_unflattened
         assert 'geographical_coverage' in errors_unflattened
+        assert 'data_anonymized' in errors_unflattened
 
         flat_extras = {}
         for extra in converted_data['extras']:

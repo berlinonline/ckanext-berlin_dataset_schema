@@ -228,6 +228,10 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('is_hvd_category'),
             toolkit.get_converter('convert_to_extras')
         ]})
+        schema.update({'data_anonymized': [
+            toolkit.get_converter('is_true_boolean'),
+            toolkit.get_converter('convert_to_extras')
+        ]})
         schema = self._prepend_required_validator(schema)
 
         return schema
@@ -238,8 +242,6 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
 
         https://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IDatasetForm.show_package_schema
         """
-
-        validator = berlin_validators.Validator()
 
         # let's grab the default schema in our plugin
         schema = super(Berlin_Dataset_SchemaPlugin, self).show_package_schema()
@@ -331,6 +333,12 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_validator('ignore_missing')
             ]
         })
+        schema.update({
+            'data_anonymized': [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing')
+            ]
+        })
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         return schema
 
@@ -395,7 +403,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             "is_temporal_granularity": validator.is_temporal_granularity ,
             "is_group_name_valid": validator.is_group_name_valid,
             "is_sample_record": validator.is_sample_record ,
-            "is_hvd_category": validator.is_hvd_category     ,
+            "is_hvd_category": validator.is_hvd_category,
+            'is_true_boolean': validator.is_true_boolean,
         }
 
     # -------------------------------------------------------------------

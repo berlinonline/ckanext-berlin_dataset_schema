@@ -15,7 +15,7 @@ from ckanext.berlin_dataset_schema.validation import Validator
 LOG = logging.getLogger(__name__)
 
 @pytest.fixture
-def validator():
+def validator() -> Validator:
     return Validator()
 
 @pytest.fixture
@@ -337,3 +337,25 @@ class TestIsHVDCategory:
             actual = validator.is_hvd_category(_hvd_category)
             expected = _hvd_category
             assert actual is expected, "%s != %s" % ( actual, expected)
+
+class TestIsTrueBoolean:
+    """
+    Tests for the validation.is_true_boolean() validator.
+    """
+
+    @pytest.mark.parametrize("bad_value", [
+        "true",
+        1,
+        3.14,
+        None,
+    ])
+    def test_is_true_boolean_raises_invalid_error_for_bad_value(self, validator, bad_value):
+        with pytest.raises(df.Invalid):
+            validator.is_true_boolean(bad_value)
+
+    @pytest.mark.parametrize("good_value", [
+        True,
+        False,
+    ])
+    def test_is_true_boolean_gives_correct_answer(self, validator, good_value):
+        assert validator.is_true_boolean(good_value) == good_value

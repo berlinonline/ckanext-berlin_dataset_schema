@@ -191,3 +191,14 @@ class Validator(object):
         else:
             raise df.Invalid(_(f'Group \'{name}\' does not exist or cannot be edited by user \'{context["user"]}\'.'))
 
+    def is_true_boolean(self, value: bool) -> bool:
+        """
+        Checks if `value` is a true boolean. Returns `value` if valud, raises df.Invalid if not.
+
+        ckan.logic.validators.boolean_validator() doesn't help, because it converts all kinds of true-ish values, never
+        raises an error and crashes if value does not have lower().
+        """
+        if isinstance(value, bool):
+            return value
+        raise df.Invalid(_(f'{value} is not a boolean.'))
+

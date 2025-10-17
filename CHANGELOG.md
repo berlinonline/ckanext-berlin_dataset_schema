@@ -2,6 +2,7 @@
 
 ## Development
 
+- Add new `data_anonymized` field to indicate if datasets that contain personal data have been anonymized prior to publication.
 - Set env variables for database and Solr index in scripts for running unit tests locally.
 - Fix failing Github CI (install curl).
 
