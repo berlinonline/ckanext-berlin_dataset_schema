@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 get_action = logic.get_action
 
 @pytest.mark.ckan_config('ckan.plugins', f"{PLUGIN_NAME}")
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
 class TestSchemaGeneration(object):
 
     @classmethod
