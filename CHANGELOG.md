@@ -3,6 +3,7 @@
 ## Development
 
 - Set env variables for database and Solr index in scripts for running unit tests locally.
+- Fix failing Github CI (install curl).
 
 ## [0.3.10](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.10)
 
