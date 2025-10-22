@@ -228,8 +228,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('is_hvd_category'),
             toolkit.get_converter('convert_to_extras')
         ]})
+        # boolean_validator takes care of converting between bool<->string,
+        # because extras are only saved as strings
         schema.update({'data_anonymized': [
             toolkit.get_converter('is_true_boolean'),
+            toolkit.get_converter('boolean_validator'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema = self._prepend_required_validator(schema)
@@ -336,7 +339,9 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         schema.update({
             'data_anonymized': [
                 toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing')
+                # boolean_validator takes care of converting between bool<->string,
+                # because extras are only saved as strings
+                toolkit.get_converter('boolean_validator'),
             ]
         })
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
