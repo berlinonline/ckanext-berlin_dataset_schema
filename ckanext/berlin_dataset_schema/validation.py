@@ -11,13 +11,14 @@ import validators
 
 from ckan.common import _
 import ckan.logic as logic
+from ckan.logic.validators import boolean_validator
 import ckan.model as model
 from ckan.common import c
 import ckan.lib.navl.dictization_functions as df
 
 from ckanext.berlin_dataset_schema.schema import Schema
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 get_action = logic.get_action
 
 class Validator(object):
@@ -191,14 +192,34 @@ class Validator(object):
         else:
             raise df.Invalid(_(f'Group \'{name}\' does not exist or cannot be edited by user \'{context["user"]}\'.'))
 
-    def is_true_boolean(self, value: bool) -> bool:
+    def is_booleanish(self, value: bool) -> bool:
         """
-        Checks if `value` is a true boolean. Returns `value` if valud, raises df.Invalid if not.
+        Checks if `value` is a true boolean or one of `['true', 'false']`.
+        Returns `True|False` if valid, raises df.Invalid if not.
 
-        ckan.logic.validators.boolean_validator() doesn't help, because it converts all kinds of true-ish values, never
-        raises an error and crashes if value does not have lower().
+        ckan.logic.validators.boolean_validator() doesn't help, because it converts all kinds of
+        true-ish values, never raises an error and crashes if value does not have lower().
         """
         if isinstance(value, bool):
             return value
-        raise df.Invalid(_(f'{value} is not a boolean.'))
+        if isinstance(value, str):
+            if value.lower() == 'true':
+                return True
+            if value.lower() == 'false':
+                return False
 
+        raise df.Invalid(_(f"{value} is not a boolean, and not one of ['true', 'false']."))
+
+    def boolean_converter(self, value) -> bool:
+        """
+        Use `boolean_validator` for conversion of bool to/from string (needed
+        for extras, which are always saved as strings), but handle potential
+        AttributeErrors.
+        """
+        try:
+            return boolean_validator(value, None)
+        except AttributeError as e:
+            # boolean_validator tries to call lower() on `value`, which in
+            # some cases (`None`, int values etc.) leads to an AttributeError.
+            # We need to handle that.
+            raise df.Invalid(str(e))

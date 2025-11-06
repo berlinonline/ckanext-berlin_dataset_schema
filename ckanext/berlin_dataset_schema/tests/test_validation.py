@@ -340,22 +340,27 @@ class TestIsHVDCategory:
 
 class TestIsTrueBoolean:
     """
-    Tests for the validation.is_true_boolean() validator.
+    Tests for the validation.is_booleanish() validator.
     """
 
     @pytest.mark.parametrize("bad_value", [
-        "true",
         1,
         3.14,
         None,
+        "T",
+        0
     ])
-    def test_is_true_boolean_raises_invalid_error_for_bad_value(self, validator, bad_value):
+    def test_is_booleanish_raises_invalid_error_for_bad_value(self, validator, bad_value):
         with pytest.raises(df.Invalid):
-            validator.is_true_boolean(bad_value)
+            validator.is_booleanish(bad_value)
 
     @pytest.mark.parametrize("good_value", [
-        True,
-        False,
+        { 'in': "true", 'expected': True },
+        { 'in': "True", 'expected': True },
+        { 'in': "false", 'expected': False },
+        { 'in': "False", 'expected': False },
+        { 'in': True, 'expected': True },
+        { 'in': False, 'expected': False },
     ])
-    def test_is_true_boolean_gives_correct_answer(self, validator, good_value):
-        assert validator.is_true_boolean(good_value) == good_value
+    def test_is_booleanish_gives_correct_answer(self, validator, good_value):
+        assert validator.is_booleanish(good_value['in']) == good_value['expected']

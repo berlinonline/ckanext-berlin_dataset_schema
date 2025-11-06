@@ -3,6 +3,7 @@
 ## Development
 
 - Add new `data_anonymized` field to indicate if datasets that contain personal data have been anonymized prior to publication.
+- Add validation function for booleans that is stricter than `boolean_validator` and actually raises an `Invalid` exception if a value is not either a boolean or one of `['true', 'false']`.
 - Set env variables for database and Solr index in scripts for running unit tests locally.
 - Fix failing Github CI (install curl).
 

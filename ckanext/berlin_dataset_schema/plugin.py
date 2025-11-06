@@ -228,11 +228,11 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             toolkit.get_converter('is_hvd_category'),
             toolkit.get_converter('convert_to_extras')
         ]})
-        # boolean_validator takes care of converting between bool<->string,
+        # boolean_converter takes care of converting between bool<->string,
         # because extras are only saved as strings
         schema.update({'data_anonymized': [
-            toolkit.get_converter('is_true_boolean'),
-            toolkit.get_converter('boolean_validator'),
+            toolkit.get_converter('is_booleanish'),
+            toolkit.get_converter('boolean_converter'),
             toolkit.get_converter('convert_to_extras')
         ]})
         schema = self._prepend_required_validator(schema)
@@ -341,7 +341,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 toolkit.get_converter('convert_from_extras'),
                 # boolean_validator takes care of converting between bool<->string,
                 # because extras are only saved as strings
-                toolkit.get_converter('boolean_validator'),
+                toolkit.get_converter('boolean_converter'),
             ]
         })
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
@@ -409,7 +409,8 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             "is_group_name_valid": validator.is_group_name_valid,
             "is_sample_record": validator.is_sample_record ,
             "is_hvd_category": validator.is_hvd_category,
-            'is_true_boolean': validator.is_true_boolean,
+            'is_booleanish': validator.is_booleanish,
+            'boolean_converter': validator.boolean_converter,
         }
 
     # -------------------------------------------------------------------
