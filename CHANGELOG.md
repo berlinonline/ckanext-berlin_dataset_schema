@@ -2,6 +2,8 @@
 
 ## Development
 
+- Fix the URL rule for the schema page, so that `schema` automatically redirects to `schema/`.
+
 ## [0.3.10](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.10)
 
 _(2025-03-31)_
