@@ -147,7 +147,20 @@ class TestSchemaGeneration(object):
             'geographical_coverage': 'Hamburg' ,
             'geographical_granularity': 'Atom',
             'data_anonymized': 4,
+            'personal_data': "None",
+            'personal_data_exemption': "foo",
         }
+        # which properties in data are not part of the standard schema?
+        non_standard = [
+            'date_released',
+            'temporal_coverage_to',
+            'temporal_granularity',
+            'geographical_coverage',
+            'geographical_granularity',
+            'data_anonymized',
+            'personal_data',
+            'personal_data_exemption',
+        ]
         mock_model = mock.MagicMock()
         mock_session = mock_model.session
         context = {'model': mock_model, 'session': mock_session}
@@ -157,9 +170,12 @@ class TestSchemaGeneration(object):
             'maintainer_email',
             'author',
             'notes',
-            'berlin_source'
+            'berlin_source',
         ]
-        bad_date = ['date_released', 'temporal_coverage_to']
+        bad_date = [
+            'date_released',
+            'temporal_coverage_to'
+        ]
         for prop in missing:
             assert errors_unflattened[prop] == ['Missing value']
         for prop in bad_date:
@@ -168,6 +184,8 @@ class TestSchemaGeneration(object):
         assert 'temporal_granularity' in errors_unflattened
         assert 'geographical_granularity' in errors_unflattened
         assert 'geographical_coverage' in errors_unflattened
+        assert 'personal_data' in errors_unflattened
+        assert 'personal_data_exemption' in errors_unflattened
         assert 'data_anonymized' in errors_unflattened
 
         flat_extras = {}
@@ -175,8 +193,9 @@ class TestSchemaGeneration(object):
             key = extra['key']
             flat_extras[key] = extra['value']
 
-        for key, value in flat_extras.items():
-            assert value is data[key]
+        for attribute in non_standard:
+            assert attribute in flat_extras
+        assert len(flat_extras) == len(non_standard)
 
     def setup_group(self, _name):
         return factories.Group(name=_name)

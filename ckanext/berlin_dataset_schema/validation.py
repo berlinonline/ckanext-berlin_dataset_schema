@@ -13,6 +13,7 @@ from ckan.common import _
 import ckan.logic as logic
 from ckan.logic.validators import boolean_validator
 import ckan.model as model
+from ckan.plugins.toolkit import asbool
 from ckan.common import c
 import ckan.lib.navl.dictization_functions as df
 
@@ -181,7 +182,7 @@ class Validator(object):
         Check if a name is a valid group name for the current user (i.e., the user is authorized to
         add packages to this group).
 
-        Returns name is valid, raises df.Invalid if not.
+        Returns name if valid, raises df.Invalid if not.
         """
         context['is_member'] = True
 
@@ -223,3 +224,36 @@ class Validator(object):
             # some cases (`None`, int values etc.) leads to an AttributeError.
             # We need to handle that.
             raise df.Invalid(str(e))
+
+    def personal_data_settings_valid(self, key, data, errors, context):
+        """
+        Check if the interplay of `personal_data`, `personal_data_exemption` and `data_anonymized`
+        is correct.
+        """
+
+        def _asbool(key, data, errors):
+            converted = False
+            try:
+                converted = asbool(data.get(key, False))
+            except ValueError as e:
+                errors[key].append(e)
+            return converted
+
+        personal_data = _asbool(('personal_data',), data, errors)
+        personal_data_exemption = _asbool(('personal_data_exemption',), data, errors)
+        data_anonymized = _asbool(('data_anonymized',), data, errors)
+
+        if not personal_data:
+            if personal_data_exemption:
+                errors[('personal_data_exemption',)].append(_("Daten ohne Personenbezug können keiner Sonderregelung unterliegen."))
+            if data_anonymized:
+                errors[('data_anonymized',)].append(_("Daten ohne Personenbezug können nicht anonymisiert werden."))
+        else:
+            if personal_data_exemption:
+                if data_anonymized:
+                    errors[('data_anonymized',)].append(_("Wenn Daten mit Personenbezug einer Sonderregelung unterliegen, sollten sie nicht anonymisiert werden."))
+            else:
+                if not data_anonymized:
+                    errors[('personal_data_exemption',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
+                    errors[('data_anonymized',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
+
