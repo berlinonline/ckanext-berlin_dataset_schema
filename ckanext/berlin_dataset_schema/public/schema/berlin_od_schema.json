@@ -845,6 +845,24 @@
       ],
       "validator": "is_sample_record"
     },
+    "personal_data": {
+      "description": "Personenbezogene Daten: Enthalten Rohdaten oder ursprünglichen Daten einen Personenbezug?",
+      "type": "boolean",
+      "validator": "is_true_boolean",
+      "user_help_text": "Enthalten die Rohdaten einen Personenbezug?"
+    },
+    "personal_data_exemption": {
+      "description": "Sonderregelung für personenbezogene Daten: Gibt es Gesetze oder Sonderregelungen, die die Veröffentlichung dieser Daten regeln? S. Berliner Open-Data-Verordnung, §5 Absatz 1 (Ausnahmen)",
+      "type": "boolean",
+      "validator": "is_true_boolean",
+      "user_help_text": "Gibt es eine Sonderregelung zur Veröffentlichung dieser Daten trotz Personenbezug?"
+    },
+    "data_anonymized": {
+      "description": "Daten anonymisiert: Falls die Rohdaten einen Personenbezug enthalten: Sind die Datenressourcen vor der Veröffentlichung anonymisiert worden?",
+      "type": "boolean",
+      "validator": "is_true_boolean",
+      "user_help_text": "Sind die Datenressourcen anonymisiert worden?"
+    },
     "resources": {
       "description": "Ressourcen: Folgende Felder können für jede Ressource individuell angegeben werden.",
       "type": "array",

@@ -20,11 +20,12 @@ PLUGIN_NAME = 'berlin_dataset_schema'
 log = logging.getLogger(__name__)
 get_action = logic.get_action
 
+@pytest.mark.ckan_config('ckan.plugins', f"{PLUGIN_NAME}")
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
 class TestSchemaGeneration(object):
 
     @classmethod
     def setup_class(cls):
-        ckan.plugins.load(PLUGIN_NAME)
 
         cls.required_atomics = [
             "author" ,
@@ -57,12 +58,6 @@ class TestSchemaGeneration(object):
             "resources" ,
             "tags" ,
         ]
-
-
-
-    @classmethod
-    def teardown_class(cls):
-        ckan.plugins.unload(PLUGIN_NAME)
 
     def _test_schema_sanity(self, schema):
         """
@@ -150,8 +145,22 @@ class TestSchemaGeneration(object):
             'license_id': 'unlicensed' ,
             'temporal_granularity': 'foo' ,
             'geographical_coverage': 'Hamburg' ,
-            'geographical_granularity': 'Atom'
+            'geographical_granularity': 'Atom',
+            'data_anonymized': 4,
+            'personal_data': "None",
+            'personal_data_exemption': "foo",
         }
+        # which properties in data are not part of the standard schema?
+        non_standard = [
+            'date_released',
+            'temporal_coverage_to',
+            'temporal_granularity',
+            'geographical_coverage',
+            'geographical_granularity',
+            'data_anonymized',
+            'personal_data',
+            'personal_data_exemption',
+        ]
         mock_model = mock.MagicMock()
         mock_session = mock_model.session
         context = {'model': mock_model, 'session': mock_session}
@@ -161,9 +170,12 @@ class TestSchemaGeneration(object):
             'maintainer_email',
             'author',
             'notes',
-            'berlin_source'
+            'berlin_source',
         ]
-        bad_date = ['date_released', 'temporal_coverage_to']
+        bad_date = [
+            'date_released',
+            'temporal_coverage_to'
+        ]
         for prop in missing:
             assert errors_unflattened[prop] == ['Missing value']
         for prop in bad_date:
@@ -172,14 +184,18 @@ class TestSchemaGeneration(object):
         assert 'temporal_granularity' in errors_unflattened
         assert 'geographical_granularity' in errors_unflattened
         assert 'geographical_coverage' in errors_unflattened
+        assert 'personal_data' in errors_unflattened
+        assert 'personal_data_exemption' in errors_unflattened
+        assert 'data_anonymized' in errors_unflattened
 
         flat_extras = {}
         for extra in converted_data['extras']:
             key = extra['key']
             flat_extras[key] = extra['value']
 
-        for key, value in flat_extras.items():
-            assert value is data[key]
+        for attribute in non_standard:
+            assert attribute in flat_extras
+        assert len(flat_extras) == len(non_standard)
 
     def setup_group(self, _name):
         return factories.Group(name=_name)
