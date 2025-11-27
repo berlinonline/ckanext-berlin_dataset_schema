@@ -11,6 +11,7 @@ _(2025-11-27)_
 - Add a validator function (`personal_data_settings_valid`) that checks if the combination of `personal_data`, `personal_data_exemption` and `data_anonymized` is correct.
 - Set env variables for database and Solr index in scripts for running unit tests locally.
 - Fix failing Github CI (install curl).
+- Fix the URL rule for the schema page, so that `schema` automatically redirects to `schema/`.
 
 ## [0.3.10](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.10)
 
