@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.3.11](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.11)
+
+_(2025-11-27)_
+
 - Add new `personal_data`, `personal_data_exemption` and `data_anonymized` fields to indicate if datasets contain contain personal data, are exempt from the requirement to anonymize the data or have been anonymized prior to publication.
 - Add validation function for booleans that is stricter than `boolean_validator` and actually raises an `Invalid` exception if a value is not either a boolean or one of `['true', 'false']`.
 - Add a validator function (`personal_data_settings_valid`) that checks if the combination of `personal_data`, `personal_data_exemption` and `data_anonymized` is correct.
