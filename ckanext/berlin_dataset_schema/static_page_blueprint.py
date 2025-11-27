@@ -17,5 +17,5 @@ def schema():
 static_page_blueprint = Blueprint('static_page_blueprint', __name__)
 
 # add rules for serving the dataset schema documentation page (/schema/index.html) under `/schema` and `/schema/`
-static_page_blueprint.add_url_rule(u'/schema', methods=[u'GET'], view_func=schema)
+# (flask takes care of redirecting `/schema` to `/schema/`)
 static_page_blueprint.add_url_rule(u'/schema/', methods=[u'GET'], view_func=schema)
