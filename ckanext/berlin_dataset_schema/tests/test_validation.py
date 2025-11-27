@@ -15,7 +15,7 @@ from ckanext.berlin_dataset_schema.validation import Validator
 LOG = logging.getLogger(__name__)
 
 @pytest.fixture
-def validator():
+def validator() -> Validator:
     return Validator()
 
 @pytest.fixture
@@ -337,3 +337,124 @@ class TestIsHVDCategory:
             actual = validator.is_hvd_category(_hvd_category)
             expected = _hvd_category
             assert actual is expected, "%s != %s" % ( actual, expected)
+
+class TestIsTrueBoolean:
+    """
+    Tests for the validation.is_booleanish() validator.
+    """
+
+    @pytest.mark.parametrize("bad_value", [
+        1,
+        3.14,
+        None,
+        "T",
+        0
+    ])
+    def test_is_booleanish_raises_invalid_error_for_bad_value(self, validator, bad_value):
+        with pytest.raises(df.Invalid):
+            validator.is_booleanish(bad_value)
+
+    @pytest.mark.parametrize("good_value", [
+        { 'in': "true", 'expected': True },
+        { 'in': "True", 'expected': True },
+        { 'in': "false", 'expected': False },
+        { 'in': "False", 'expected': False },
+        { 'in': True, 'expected': True },
+        { 'in': False, 'expected': False },
+    ])
+    def test_is_booleanish_gives_correct_answer(self, validator, good_value):
+        assert validator.is_booleanish(good_value['in']) == good_value['expected']
+
+class TestPersonalDataSettingsValid:
+    """
+    Tests for the validation.personal_data_settings_valid() validator
+    """
+
+    @pytest.mark.parametrize("personal_data_settings", [
+        {
+            'data': {
+                ('personal_data',): False,
+                ('personal_data_exemption',): False,
+                ('data_anonymized',): False 
+            },
+            'expected': None
+        },
+        {
+            'data': {
+                ('personal_data',): False,
+                ('personal_data_exemption',): True,
+                ('data_anonymized',): True 
+            },
+            'expected': ('personal_data_exemption',)
+        },
+        {
+            'data': {
+                ('personal_data',): False,
+                ('personal_data_exemption',): False,
+                ('data_anonymized',): True 
+            },
+            'expected': ('data_anonymized',)
+        },
+        {
+            'data': {
+                ('personal_data',): False,
+                ('personal_data_exemption',): True,
+                ('data_anonymized',): False 
+            },
+            'expected': ('personal_data_exemption',)
+        },
+        {
+            'data': {
+                ('personal_data',): True,
+                ('personal_data_exemption',): True,
+                ('data_anonymized',): True 
+            },
+            'expected': ('data_anonymized',)
+        },
+        {
+            'data': {
+                ('personal_data',): True,
+                ('personal_data_exemption',): True,
+                ('data_anonymized',): False 
+            },
+            'expected': None
+        },
+        {
+            'data': {
+                ('personal_data',): True,
+                ('personal_data_exemption',): False,
+                ('data_anonymized',): True 
+            },
+            'expected': None
+        },
+        {
+            'data': {
+                ('personal_data',): True,
+                ('personal_data_exemption',): False,
+                ('data_anonymized',): False 
+            },
+            'expected': ('personal_data_exemption',)
+        },
+        {
+            'data': {
+                ('personal_data',): True,
+                ('personal_data_exemption',): False,
+                ('data_anonymized',): False 
+            },
+            'expected': ('data_anonymized',)
+        },
+    ])
+    def test_personal_data_settings_valid_gives_correct_answer(self, validator: Validator, personal_data_settings):
+        errors = {
+            ('personal_data',): [],
+            ('personal_data_exemption',): [],
+            ('data_anonymized',): [],
+        }
+        validator.personal_data_settings_valid(None, personal_data_settings['data'], errors, None)
+        if personal_data_settings['expected']:
+            # there must be entries in the error list for the expected field
+            assert len(errors[personal_data_settings['expected']]) > 0
+        else:
+            # all error lists must be empty
+            for field, error_list in errors.items():
+                assert len(error_list) == 0

@@ -11,13 +11,15 @@ import validators
 
 from ckan.common import _
 import ckan.logic as logic
+from ckan.logic.validators import boolean_validator
 import ckan.model as model
+from ckan.plugins.toolkit import asbool
 from ckan.common import c
 import ckan.lib.navl.dictization_functions as df
 
 from ckanext.berlin_dataset_schema.schema import Schema
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 get_action = logic.get_action
 
 class Validator(object):
@@ -180,7 +182,7 @@ class Validator(object):
         Check if a name is a valid group name for the current user (i.e., the user is authorized to
         add packages to this group).
 
-        Returns name is valid, raises df.Invalid if not.
+        Returns name if valid, raises df.Invalid if not.
         """
         context['is_member'] = True
 
@@ -190,4 +192,68 @@ class Validator(object):
             return name
         else:
             raise df.Invalid(_(f'Group \'{name}\' does not exist or cannot be edited by user \'{context["user"]}\'.'))
+
+    def is_booleanish(self, value: bool) -> bool:
+        """
+        Checks if `value` is a true boolean or one of `['true', 'false']`.
+        Returns `True|False` if valid, raises df.Invalid if not.
+
+        ckan.logic.validators.boolean_validator() doesn't help, because it converts all kinds of
+        true-ish values, never raises an error and crashes if value does not have lower().
+        """
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            if value.lower() == 'true':
+                return True
+            if value.lower() == 'false':
+                return False
+
+        raise df.Invalid(_(f"{value} is not a boolean, and not one of ['true', 'false']."))
+
+    def boolean_converter(self, value) -> bool:
+        """
+        Use `boolean_validator` for conversion of bool to/from string (needed
+        for extras, which are always saved as strings), but handle potential
+        AttributeErrors.
+        """
+        try:
+            return boolean_validator(value, None)
+        except AttributeError as e:
+            # boolean_validator tries to call lower() on `value`, which in
+            # some cases (`None`, int values etc.) leads to an AttributeError.
+            # We need to handle that.
+            raise df.Invalid(str(e))
+
+    def personal_data_settings_valid(self, key, data, errors, context):
+        """
+        Check if the interplay of `personal_data`, `personal_data_exemption` and `data_anonymized`
+        is correct.
+        """
+
+        def _asbool(key, data, errors):
+            converted = False
+            try:
+                converted = asbool(data.get(key, False))
+            except ValueError as e:
+                errors[key].append(e)
+            return converted
+
+        personal_data = _asbool(('personal_data',), data, errors)
+        personal_data_exemption = _asbool(('personal_data_exemption',), data, errors)
+        data_anonymized = _asbool(('data_anonymized',), data, errors)
+
+        if not personal_data:
+            if personal_data_exemption:
+                errors[('personal_data_exemption',)].append(_("Daten ohne Personenbezug können keiner Sonderregelung unterliegen."))
+            if data_anonymized:
+                errors[('data_anonymized',)].append(_("Daten ohne Personenbezug können nicht anonymisiert werden."))
+        else:
+            if personal_data_exemption:
+                if data_anonymized:
+                    errors[('data_anonymized',)].append(_("Wenn Daten mit Personenbezug einer Sonderregelung unterliegen, sollten sie nicht anonymisiert werden."))
+            else:
+                if not data_anonymized:
+                    errors[('personal_data_exemption',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
+                    errors[('data_anonymized',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
 
