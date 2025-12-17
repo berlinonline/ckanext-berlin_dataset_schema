@@ -2,6 +2,8 @@
 
 ## Development
 
+- Add `cc-by-de/3.0` to the list of accepted licenses.
+
 ## [0.3.11](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.11)
 
 _(2025-11-27)_
