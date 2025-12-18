@@ -2,6 +2,13 @@
 
 ## Development
 
+## [0.3.12](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.12)
+
+_(2025-12-18)_
+
+- Add `cc-by-de/3.0` to the list of accepted licenses.
+- Restructure validator tests to use parametrization instead of internal loops.
+
 ## [0.3.11](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.11)
 
 _(2025-11-27)_

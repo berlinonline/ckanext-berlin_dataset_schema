@@ -89,16 +89,15 @@ class TestIsValidUrl:
     Tests for validation.is_berlin_type() validator.
     """
 
-    def test_valid_urls_are_accepted(self, validator):
-        urls = [
-            "http://www.test.org" ,
-            "https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" ,
-            "https://daten.berlin.de/ref/geo/coverage" ,
-            "ftp://an.ftp.site" ,
-            "" # empty URL is valid (robustness, etc.)
-        ]
-        for url in urls:
-            assert validator.is_valid_url(url) == url
+    @pytest.mark.parametrize("url", [
+        "http://www.test.org" ,
+        "https://www.berlin.de/sen/wirtschaft/wirtschaft/konjunktur-und-statistik/wirtschaftsdaten/" ,
+        "https://daten.berlin.de/ref/geo/coverage" ,
+        "ftp://an.ftp.site" ,
+        "" # empty URL is valid (robustness, etc.)
+    ])
+    def test_valid_urls_are_accepted(self, validator, url):
+        assert validator.is_valid_url(url) == url
 
     @pytest.mark.parametrize("url", [
         "noscheme",
@@ -122,12 +121,14 @@ class TestIsBerlinType:
         with pytest.raises(df.Invalid):
             validator.is_berlin_type('goo star')
 
-    def test_is_berlin_type_gives_correct_answer(self, validator):
-        berlin_types = [ 'datensatz', 'dokument', 'app' ]
-        for _type in berlin_types:
-            actual = validator.is_berlin_type(_type)
-            expected = _type
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize("type", [
+        'datensatz',
+        'dokument',
+        'app',
+    ])
+    def test_is_berlin_type_gives_correct_answer(self, validator, type):
+        actual = validator.is_berlin_type(type)
+        assert actual is type, "%s != %s" % ( actual, type)
 
 # -------------------
 
@@ -140,12 +141,21 @@ class TestIsLicenseId:
         with pytest.raises(df.Invalid):
             validator.is_license_id('unlicensed')
 
-    def test_is_license_id_gives_correct_answer(self, validator):
-        license_ids = ["cc-by", "cc-by/4.0", "cc-zero", "cc-by-sa", "cc-by-nc", "dl-de-zero-2.0", "dl-de-by-2.0", "odc-odbl", "other-closed" ]
-        for _id in license_ids:
-            actual = validator.is_license_id(_id)
-            expected = _id
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize("license_id", [
+        "cc-by",
+        "cc-by-de/3.0",
+        "cc-by/4.0",
+        "cc-zero",
+        "cc-by-sa",
+        "cc-by-nc",
+        "dl-de-zero-2.0", 
+        "dl-de-by-2.0",
+        "odc-odbl",
+        "other-closed"
+    ])
+    def test_is_license_id_gives_correct_answer(self, validator, license_id):
+        actual = validator.is_license_id(license_id)
+        assert actual is license_id, "%s != %s" % ( actual, license_id )
 
 # -------------------
 
@@ -158,23 +168,21 @@ class TestIsGeoFeature:
         with pytest.raises(df.Invalid):
             validator.is_geo_feature('Hamburg')
 
-    def test_is_geo_feature_gives_correct_answer(self, validator):
-        geo_features = [
-            u'Keine',
-            u'Adlershof',
-            u'Grünau',
-            u'Märkisches Viertel',
-            u'Müggelheim',
-            u'Neu-Hohenschönhausen',
-            u'Neukölln',
-            u'Niederschöneweide',
-            u'Nikolassee',
-            u'Weißensee',
-        ]
-        for _feature in geo_features:
-            actual = validator.is_geo_feature(_feature)
-            expected = _feature
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize('feature', [
+        "Keine",
+        "Adlershof",
+        "Grünau",
+        "Märkisches Viertel",
+        "Müggelheim",
+        "Neu-Hohenschönhausen",
+        "Neukölln",
+        "Niederschöneweide",
+        "Nikolassee",
+        "Weißensee",
+    ])
+    def test_is_geo_feature_gives_correct_answer(self, validator, feature):
+        actual = validator.is_geo_feature(feature)
+        assert actual is feature, "%s != %s" % ( actual, feature)
 
 # -------------------
 
@@ -187,29 +195,27 @@ class TestIsGeoGranularity:
         with pytest.raises(df.Invalid):
             validator.is_geo_granularity('Dumdum')
 
-    def test_is_geo_granularity_gives_correct_answer(self, validator):
-        geo_granularities = [
-            'Keine',
-            'Deutschland',
-            'Berlin',
-            'Bezirk',
-            'Ortsteil',
-            'Prognoseraum',
-            'Bezirksregion',
-            'Planungsraum',
-            'Block',
-            'Einschulbereich',
-            'Kontaktbereich',
-            'PLZ',
-            'Stimmbezirk',
-            'Quartiersmanagement',
-            'Wohnanlage',
-            'Wahlkreis'
-        ]
-        for _granularity in geo_granularities:
-            actual = validator.is_geo_granularity(_granularity)
-            expected = _granularity
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize('granularity', [
+        'Keine',
+        'Deutschland',
+        'Berlin',
+        'Bezirk',
+        'Ortsteil',
+        'Prognoseraum',
+        'Bezirksregion',
+        'Planungsraum',
+        'Block',
+        'Einschulbereich',
+        'Kontaktbereich',
+        'PLZ',
+        'Stimmbezirk',
+        'Quartiersmanagement',
+        'Wohnanlage',
+        'Wahlkreis'
+    ])
+    def test_is_geo_granularity_gives_correct_answer(self, validator, granularity):
+            actual = validator.is_geo_granularity(granularity)
+            assert actual is granularity, "%s != %s" % ( actual, granularity)
 
 # -------------------
 
@@ -222,23 +228,21 @@ class TestIsTemporalGranularity:
         with pytest.raises(df.Invalid):
             validator.is_temporal_granularity('Dumdum')
 
-    def test_is_temporal_granularity_gives_correct_answer(self, validator):
-        temporal_granularities = [ 
-            'Keine',
-            '5 Jahre',
-            'Jahr',
-            'Quartal',
-            'Monat',
-            'Woche',
-            'Tag',
-            'Stunde',
-            'Minute',
-            'Sekunde'
-        ]
-        for _granularity in temporal_granularities:
-            actual = validator.is_temporal_granularity(_granularity)
-            expected = _granularity
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize('granularity', [
+        'Keine',
+        '5 Jahre',
+        'Jahr',
+        'Quartal',
+        'Monat',
+        'Woche',
+        'Tag',
+        'Stunde',
+        'Minute',
+        'Sekunde'
+    ])
+    def test_is_temporal_granularity_gives_correct_answer(self, validator, granularity):
+        actual = validator.is_temporal_granularity(granularity)
+        assert actual is granularity, "%s != %s" % ( actual, granularity)
 
 # -------------------
 
@@ -298,22 +302,20 @@ class TestIsSampleRecord:
         with pytest.raises(df.Invalid):
             validator.is_sample_record('Dumdum')
 
-    def test_is_sample_record_gives_correct_answer(self, validator):
-        sample_records = [ 
-            'abfallentsorgung',
-            'bau/grundstuecksbewertung',
-            'bevoelkerungsstruktur/staatsangehoerigkeit',
-            'bildung/kindertageseinrichtung/standort',
-            'finanzen/haushalt/ausserplanmaessigeAufwendungen',
-            'floraUndFauna/flaeche/naturschutzgebiet',
-            'raumplanung',
-            'wirtschaft/wirtschaftsfoerderung',
-            'wirtschaft/wirtschaftsstandort',
-        ]
-        for _sample_record in sample_records:
-            actual = validator.is_sample_record(_sample_record)
-            expected = _sample_record
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize('sample_record', [
+        'abfallentsorgung',
+        'bau/grundstuecksbewertung',
+        'bevoelkerungsstruktur/staatsangehoerigkeit',
+        'bildung/kindertageseinrichtung/standort',
+        'finanzen/haushalt/ausserplanmaessigeAufwendungen',
+        'floraUndFauna/flaeche/naturschutzgebiet',
+        'raumplanung',
+        'wirtschaft/wirtschaftsfoerderung',
+        'wirtschaft/wirtschaftsstandort',
+    ])
+    def test_is_sample_record_gives_correct_answer(self, validator, sample_record):
+        actual = validator.is_sample_record(sample_record)
+        assert actual is sample_record, "%s != %s" % ( actual, sample_record)
 
 class TestIsHVDCategory:
     """
@@ -324,19 +326,17 @@ class TestIsHVDCategory:
         with pytest.raises(df.Invalid):
             validator.is_hvd_category('Dumdum')
 
-    def test_is_hvd_category_gives_correct_answer(self, validator):
-        hvd_categories = [ 
-            'c_a9135398',
-            'c_e1da4e07',
-            'c_164e0bf5',
-            'c_ac64a52d',
-            'c_b79e35eb',
-            'c_dd313021',
-        ]
-        for _hvd_category in hvd_categories:
-            actual = validator.is_hvd_category(_hvd_category)
-            expected = _hvd_category
-            assert actual is expected, "%s != %s" % ( actual, expected)
+    @pytest.mark.parametrize('hvd_category', [
+        'c_a9135398',
+        'c_e1da4e07',
+        'c_164e0bf5',
+        'c_ac64a52d',
+        'c_b79e35eb',
+        'c_dd313021',
+    ])
+    def test_is_hvd_category_gives_correct_answer(self, validator, hvd_category):
+        actual = validator.is_hvd_category(hvd_category)
+        assert actual is hvd_category, "%s != %s" % ( actual, hvd_category)
 
 class TestIsTrueBoolean:
     """
