@@ -81,6 +81,7 @@
       "enum": [
         "cc-zero",
         "cc-by",
+        "cc-by-de/3.0",
         "cc-by/4.0",
         "cc-by-sa",
         "cc-by-nc",
@@ -92,6 +93,7 @@
       "labels": [
         "Creative Commons Zero",
         "Creative Commons Attribution",
+        "Creative Commons Namensnennung 3.0 Deutschland",
         "Creative Commons Attribution 4.0",
         "Creative Commons Attribution Share-Alike",
         "Creative Commons Non-Commercial (Any)",
