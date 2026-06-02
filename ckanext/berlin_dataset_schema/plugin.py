@@ -407,7 +407,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 try:
                     validator.is_group_name_valid(group_name, context)
                 except df.Invalid as e:
-                    _errors['groups'] = _errors.get('groups', []) + [_(f'Group \'{group_name}\' does not exist or cannot be edited by user \'{context["user"]}\'.')]
+                    _errors['groups'] = _errors.get('groups', []) + [str(e.error)]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
         if action in [ 'package_create', 'package_update' ]:
