@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.3.13](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.13)
+
+_(2026-06-08)_
+
 - Enforce required resource metadata (`properties/resources/items/required`) in dataset schema.
 - Prepare error message for missing/non-authorized group to be better translatable.
 
