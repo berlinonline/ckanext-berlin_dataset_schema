@@ -38,14 +38,20 @@ class Schema(plugins.SingletonPlugin):
         except AttributeError:
             raise SchemaError("JSON schema not loaded yet")
 
-    def required(self, attribute):
+    def required(self, attribute: str):
         """
         Helper function to check if a given dataset attribute is required.
         """
-        _required = self.schema().get('required')
-        if _required:
-            return attribute in _required
-        raise SchemaError("JSON Schema does not contain 'required' attribute.")
+        schema = self.schema()
+        haystack = 'schema'
+        if attribute.startswith('resources/'):
+            schema = self.resource_schema()
+            attribute = attribute.split('resources/')[-1]
+            haystack = 'schema/properties/resources/items'
+        required = schema.get('required')
+        if required:
+            return attribute in required
+        raise SchemaError(f"{haystack} does not contain 'required' attribute.")
 
     def contains(self, attribute):
         """
@@ -94,6 +100,19 @@ class Schema(plugins.SingletonPlugin):
             else:
                 raise SchemaError(f"The attribute '{attribute}' does not exist.")
         raise SchemaError("JSON Schema does not contain 'properties' attribute.")
+
+    def resource_schema(self) -> dict:
+        """
+        Convenience function for accessing ['properties']['resources']['items']
+        """
+        properties = self.schema().get('properties')
+        if properties:
+            resources = properties.get('resources')
+            if resources:
+                items = resources.get('items')
+                if items:
+                    return items
+        raise SchemaError("JSON Schema does not contain ['properties']['resources']['items'] path.")
 
 class SchemaError(Exception):
     """
