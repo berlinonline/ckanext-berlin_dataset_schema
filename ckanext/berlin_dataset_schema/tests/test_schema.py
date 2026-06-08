@@ -72,6 +72,23 @@ class TestCompleteSchema(object):
         with pytest.raises(schema.SchemaError):
             schema.Schema().enum_for_attribute('foo_bar')
 
+    @pytest.mark.parametrize("data", [
+        {
+            'attribute': 'resources/url',
+            'expected': True
+        },
+        {
+            'attribute': 'resources/description',
+            'expected': False
+        },
+        {
+            'attribute': 'resources/boingo',
+            'expected': False
+        },
+    ])
+    def test_required_parses_resources_path(self, berlin_od_schema, data):
+        assert schema.Schema().required(data['attribute']) == data['expected']
+
 class TestEmptySchema(object):
 
     def test_empty_schema_raises_schema_error_on_enum_for_attribute(self, empty_schema):

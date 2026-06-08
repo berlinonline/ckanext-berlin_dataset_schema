@@ -151,6 +151,14 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                         schema[attribute] = [ required_validator ] + validator_chain
                     else:
                         schema[attribute][0] = required_validator
+
+        resource_schema = schema['resources']
+        for attribute in self.json_schema.resource_schema()['required']:
+            resource_schema[attribute] = [
+                toolkit.get_validator('not_empty'),
+                toolkit.get_validator('unicode_safe')
+            ]
+
         return schema
 
     def _modify_package_schema(self, schema):
@@ -399,7 +407,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
                 try:
                     validator.is_group_name_valid(group_name, context)
                 except df.Invalid as e:
-                    _errors['groups'] = _errors.get('groups', []) + [_(f'Group \'{group_name}\' does not exist or cannot be edited by user \'{context["user"]}\'.')]
+                    _errors['groups'] = _errors.get('groups', []) + [str(e.error)]
 
         (data_dict, errors) = toolkit.navl_validate(data_dict, schema, context)
         if action in [ 'package_create', 'package_update' ]:

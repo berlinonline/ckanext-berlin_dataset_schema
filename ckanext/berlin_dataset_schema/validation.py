@@ -191,7 +191,13 @@ class Validator(object):
         if name in group_names:
             return name
         else:
-            raise df.Invalid(_(f'Group \'{name}\' does not exist or cannot be edited by user \'{context["user"]}\'.'))
+            error_message = _(
+                "Group '%(groupname)s' does not exist or cannot be edited by '%(username)s'."
+            ) % {
+                "groupname": name,
+                "username": context["user"],
+            }
+            raise df.Invalid(error_message)
 
     def is_booleanish(self, value: bool) -> bool:
         """
