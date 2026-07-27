@@ -2,6 +2,10 @@
 
 ## Development
 
+- Fix accessibility barriers raised in the 2026-01 report:
+  - 9.3.3.1 "Fehlererkennung/Allgemeine Fehlermeldung" (implement custom error messages for forms like "Please enter the publisher of this dataset.", rather than using generic ones like "Missing value").
+- Replace the generic `not_empty` validator function with a customizable one (`ckanext.berlin_dataset_schema.validation.not_empty_customizable`) to allow error messages that are specific to the metadata attribute that the function is used on.
+
 ## [0.3.13](https://github.com/berlinonline/ckanext-berlin_dataset_schema/releases/tag/0.3.13)
 
 _(2026-06-08)_

@@ -121,7 +121,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
         required.
         """
         if self.json_schema.required(attribute):
-            return toolkit.get_validator('not_empty')
+            return toolkit.get_validator('not_empty_customizable')
         return toolkit.get_validator('ignore_missing')
 
     def _required_validator_set(self, validator_chain):
@@ -445,6 +445,7 @@ class Berlin_Dataset_SchemaPlugin(plugins.SingletonPlugin, toolkit.DefaultDatase
             'is_booleanish': validator.is_booleanish,
             'boolean_converter': validator.boolean_converter,
             'personal_data_settings_valid': validator.personal_data_settings_valid,
+            'not_empty_customizable': validator.not_empty_customizable,
         }
 
     # -------------------------------------------------------------------

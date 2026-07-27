@@ -22,6 +22,15 @@ from ckanext.berlin_dataset_schema.schema import Schema
 LOG = logging.getLogger(__name__)
 get_action = logic.get_action
 
+NOT_EMPTY_MESSAGES = {
+    ('author',): 'Please enter the publisher of this dataset.',
+    ('date_released',): 'Please enter the date when this dataset was first published.',
+    ('maintainer_email',): 'Please enter an e-mail address where users can ask questions about this dataset.',
+    ('name',): 'Please enter a unique id for this dataset.',
+    ('notes',): 'Please enter a description for this dataset.',
+    ('title',): 'Please enter the title of this dataset.',
+}
+
 class Validator(object):
     
     def __init__(self):
@@ -81,7 +90,7 @@ class Validator(object):
         '''
         enum = self.json_schema.enum_for_attribute('hvd_category')
         return enum
-    
+
     def isodate_notime(self, value):
         """
         Validator function to check that a value corresponds to the
@@ -263,3 +272,16 @@ class Validator(object):
                     errors[('personal_data_exemption',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
                     errors[('data_anonymized',)].append(_("Daten mit Personenbezug müssen entweder einer Sonderregelung unterliegen, oder vor der Veröffentlichung anonymisiert werden."))
 
+    def not_empty_customizable(self, key, data, errors, context):
+        value = data.get(key)
+        valid_values = [False, 0, 0.0]
+
+        if value in valid_values:
+            return
+
+        if value is df.missing or not value:
+
+            message = NOT_EMPTY_MESSAGES.get(key, 'Missing value')
+
+            errors[key].append(_(message))
+            raise df.StopOnError

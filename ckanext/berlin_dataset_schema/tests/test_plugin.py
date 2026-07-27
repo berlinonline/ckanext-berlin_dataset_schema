@@ -2,18 +2,18 @@
 """Tests for plugin.py."""
 
 import logging
-import mock
-import pytest
 
-import ckan.logic as logic
-import ckan.plugins
-from ckan.plugins.toolkit import url_for
-import ckan.lib.plugins as lib_plugins
 import ckan.lib.navl.dictization_functions as df
+import ckan.lib.plugins as lib_plugins
+import ckan.logic as logic
+import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
-import ckan.model as model
+from ckanext.berlin_dataset_schema.validation import NOT_EMPTY_MESSAGES
+import mock
+import pytest
+from ckan.plugins.toolkit import url_for
 
 PLUGIN_NAME = 'berlin_dataset_schema'
 
@@ -109,7 +109,7 @@ class TestSchemaGeneration(object):
         schema = package_plugin.create_package_schema()
         for prop in TestSchemaGeneration.required_atomics:
             validator_chain = schema[prop]
-            assert validator_chain[0] is toolkit.get_validator('not_empty')
+            assert validator_chain[0] is toolkit.get_validator('not_empty_customizable')
 
     def test_nonrequired_properties_have_ignore_missing(self):
         """
@@ -177,7 +177,7 @@ class TestSchemaGeneration(object):
             'temporal_coverage_to'
         ]
         for prop in missing:
-            assert errors_unflattened[prop] == ['Missing value']
+            assert errors_unflattened[prop] == [NOT_EMPTY_MESSAGES.get((prop,), "Missing value")]
         for prop in bad_date:
             assert errors_unflattened[prop] == ['Date format incorrect. Use ISO8601: YYYY-MM-DD.']
         assert 'license_id' in errors_unflattened
