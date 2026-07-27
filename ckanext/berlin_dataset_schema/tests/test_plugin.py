@@ -287,12 +287,37 @@ class TestSchemaGeneration(object):
             'category': 'arbeit'
         }
         context = { 'user': user['name'] }
-        validated_data = package_plugin.validate(context, data, schema, "package_create")
-
-        _data = validated_data[0]
-        _errors = validated_data[1]
+        (data_dict, _errors)  = package_plugin.validate(context, data, schema, "package_create")
 
         assert 'groups' in _errors
+        error = _errors['groups']
+        assert "does not exist or cannot be edited by" in error.pop()
+
+    @pytest.mark.parametrize('category', [
+        'empty',
+        ''
+    ])
+    def test_empty_category_generates_error(self, category):
+        """
+        Only existing groups can be chosen as a category.
+        """
+        package_plugin = lib_plugins.lookup_package_plugin()
+        schema = package_plugin.create_package_schema()
+
+        helpers.reset_db()
+        user = self.setup_user()
+
+        data = {
+            'name': 'foo_bar' ,
+            'title': 'Foo Bar' ,
+            'category': category
+        }
+        context = { 'user': user['name'] }
+        (data_dict, _errors)  = package_plugin.validate(context, data, schema, "package_create")
+
+        assert 'groups' in _errors
+        error = _errors['groups']
+        assert error.pop() == "Please choose a category."
 
     def test_unauthorized_user_cannot_add_category(self):
         """

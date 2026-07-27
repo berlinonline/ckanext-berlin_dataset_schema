@@ -197,11 +197,13 @@ class Validator(object):
 
         users_groups = get_action('group_list_authz')(context, {})
         group_names = [ group['name'] for group in users_groups ]
+        if name == 'empty' or name == '' or not name:
+            raise df.Invalid(_("Please choose a category."))
         if name in group_names:
             return name
         else:
             error_message = _(
-                "Group '%(groupname)s' does not exist or cannot be edited by '%(username)s'."
+                "Category '%(groupname)s' does not exist or cannot be edited by '%(username)s'."
             ) % {
                 "groupname": name,
                 "username": context["user"],
